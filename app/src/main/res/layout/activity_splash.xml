@@ -8,32 +8,21 @@
     android:background="@color/shada">
 
     <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:id="@+id/imageView2"
+        android:layout_width="379dp"
+        android:layout_height="300dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="108dp"
-        android:layout_marginLeft="60dp"
-        android:background="@drawable/first" />
-    <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="130dp"
-        android:layout_marginLeft="215dp"
-        android:background="@drawable/second" />
-    <ImageView
-        android:layout_width="200dp"
-        android:layout_height="60dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="275dp"
-        android:layout_marginLeft="105dp"
-        android:background="@drawable/chitchat" />
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="54dp"
+        android:src="@drawable/logo" />
+
 
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="520dp"
+        android:layout_marginTop="535dp"
         android:gravity="center"
         android:text="POWERED BY"
         android:textColor="@color/colorPrimaryDark"
@@ -46,7 +35,7 @@
         android:layout_height="57dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="535dp"
+        android:layout_marginTop="550dp"
         app:srcCompat="@drawable/teamlogo" />
 
 

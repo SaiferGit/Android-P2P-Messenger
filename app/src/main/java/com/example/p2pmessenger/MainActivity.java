@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
         // adding the toolbar
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("Weebo"); // giving the title
+        getSupportActionBar().setTitle("Chit Chat"); // giving the title
 
         //mToolbar.setVisibility(View.INVISIBLE);
 
@@ -285,6 +285,7 @@ public class MainActivity extends AppCompatActivity {
 
         changeBG = menu.findItem(R.id.main_change_bg_option);
         saveChat = menu.findItem(R.id.main_save_chat_option);
+
         disconnect = menu.findItem(R.id.main_disconnect_option);
 
         changeBG.setEnabled(false);
@@ -299,7 +300,7 @@ public class MainActivity extends AppCompatActivity {
         View mView = getLayoutInflater().inflate(R.layout.custom_disconnect_dialog, null);
 
         TextView textView = mView.findViewById(R.id.custom_disconnect_dialog_textView);
-        textView.setText("Are you sure you want to save your conversations? It will be saved on android/data/com.example.p2p/");
+        textView.setText("Are you sure you want to save your conversations? It will be saved on android/data/com.example.p2pmessenger/");
         Button btn_cancel = (Button) mView.findViewById(R.id.btn_cancel);
         Button btn_yes = (Button) mView.findViewById(R.id.btn_yes);
 
@@ -493,50 +494,6 @@ public class MainActivity extends AppCompatActivity {
         String path = uri.getPathSegments().get(1);
         path = Environment.getExternalStorageDirectory().getPath()+"/"+path.split(":")[1];
         return path;
-    }
-
-
-    private String gettingFileData() {
-        String info = "";
-        String msg = "txtfile@%@txtfile";
-        info += msg;
-        //sendReceive.write(msg);
-        File file = new File(filePath);
-        try{
-            Scanner input = new Scanner(file);
-            while(input.hasNext()){
-                String lines = input.nextLine();
-                info += lines;
-                info += "\n";
-                //sendReceive.write(lines);
-            }
-        } catch (FileNotFoundException e) {
-            Log.d("yourTag","Error: "+e);
-        }
-        Log.d("yourTag","File contains:\n"+info);
-        return info;
-    }
-
-    private void createFileForHim(String acceptedMsg) {
-        //Time getting
-        String time = getTime();
-
-        String data = acceptedMsg.replace("txtfile@%@txtfile", "");
-
-        File path = this.getExternalFilesDir(null);
-        File file = new File(path, "File"+ "(" + time + ")" + System.lineSeparator() + ".txt");
-        FileOutputStream stream;
-        try {
-            stream = new FileOutputStream(file, false);
-            stream.write(data.getBytes());
-            stream.close();
-            Toast.makeText(this, "File Succcessfully Saved!", Toast.LENGTH_SHORT).show();
-            Log.d(TAG, data);
-        } catch (FileNotFoundException e) {
-            Log.d(TAG, e.toString());
-        } catch (IOException e) {
-            Log.d(TAG, e.toString());
-        }
     }
 
     private void openDisconnectAlertDialogBox() {
