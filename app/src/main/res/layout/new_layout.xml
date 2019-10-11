@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/shada">
+
+    <TextView
+        android:id="@+id/receivingPortText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rec Port: "
+        android:layout_marginTop="27dp"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:layout_marginLeft="10dp"/>
+
+    <EditText
+        android:id="@+id/receiveEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:hint="Receiving Port"
+        android:inputType="number"
+        android:background="@drawable/edit_text_bg"
+        android:padding="10dp"
+        android:textColor="#37474F"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="60dp"
+        />
+
+    <Button
+        android:id="@+id/hostButton"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/receiveEditText"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="00dp"
+        android:background="@drawable/rounded_corners"
+        android:padding="2dp"
+        android:text="Start Server"
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/targetIPText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Target IP: "
+        android:layout_below="@+id/receiveEditText"
+        android:layout_marginTop="69dp"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:layout_marginLeft="5dp"/>
+
+    <EditText
+        android:id="@+id/targetIPEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:hint="Target Port"
+        android:inputType="textPersonName"
+        android:text="192.168.1."
+        android:background="@drawable/edit_text_bg"
+        android:padding="10dp"
+        android:textColor="#37474F"
+        android:textStyle="bold"
+        android:layout_below="@+id/receiveEditText"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="60dp"
+        />
+    <TextView
+        android:id="@+id/targetPortText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Targ Port: "
+        android:layout_below="@+id/targetIPText"
+        android:layout_marginTop="25dp"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:layout_marginLeft="5dp"/>
+
+    <EditText
+        android:id="@+id/targetPortEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:hint="Target Port"
+        android:inputType="number"
+        android:background="@drawable/edit_text_bg"
+        android:padding="10dp"
+        android:textColor="#37474F"
+        android:textStyle="bold"
+        android:layout_below="@+id/targetIPEditText"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="60dp"
+        />
+
+    <Button
+        android:id="@+id/disconnectButton"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/targetPortEditText"
+        android:layout_marginLeft="170dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="00dp"
+        android:background="@drawable/rounded_corners"
+        android:padding="2dp"
+        android:text="Disconnect"
+        android:textAllCaps="false"
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/connectButton"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/targetPortEditText"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="00dp"
+        android:background="@drawable/rounded_corners"
+        android:padding="2dp"
+        android:text="Connect"
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/connectButton"
+        android:layout_marginTop="10dp"
+        android:background="@color/cardview_shadow_end_color">
+
+        <ScrollView
+            android:id="@+id/conversations"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+
+
+
+        </ScrollView>
+
+
+
+        <RelativeLayout
+            android:id="@+id/chat_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:background="#d6d6c2"
+            android:orientation="horizontal"
+            >
+
+
+            <ImageButton
+                android:id="@+id/send_files_btn"
+                android:layout_width="60dp"
+                android:layout_height="50dp"
+                android:src="@drawable/send_files"
+                android:layout_alignParentStart="true"
+                android:backgroundTint="#d6d6c2"
+                />
+
+
+            <EditText
+                android:id="@+id/messageEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="-1dp"
+                android:layout_toStartOf="@+id/send_message_btn"
+                android:layout_toEndOf="@+id/send_files_btn"
+                android:background="@drawable/edit_text_bg2"
+                android:hint="type message here..."
+                android:maxLines="5"
+                android:padding="11dp" />
+
+
+            <ImageButton
+                android:id="@+id/send_message_btn"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/send_message"
+                android:layout_alignParentEnd="true"
+                android:backgroundTint="#d6d6c2"
+                />
+
+        </RelativeLayout>
+
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

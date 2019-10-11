@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:title="Save Chat"
+        android:id="@+id/main_save_chat_option"
+        app:showAsAction="never"
+        >
+        <!-- user click korlei jate ashe -->
+
+    </item>
+
+    <item
+        android:title="Change Background"
+        android:id="@+id/main_change_bg_option"
+        app:showAsAction="never"
+        >
+        <!-- user click korlei jate ashe -->
+
+    </item>
+
+    <item
+        android:title="Disconnect"
+        android:id="@+id/main_disconnect_option"
+        app:showAsAction="never"
+        >
+        <!-- user click korlei jate ashe -->
+
+    </item>
+
+</menu>
