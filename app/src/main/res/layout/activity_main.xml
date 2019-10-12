@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Rec Port: "
-            android:layout_marginTop="115dp"
+            android:layout_marginTop="95dp"
             android:textStyle="bold"
             android:textSize="20dp"
             android:layout_marginLeft="30dp"/>
@@ -44,7 +44,7 @@
             android:layout_alignParentStart="true"
             android:layout_marginStart="132dp"
             android:layout_marginLeft="130dp"
-            android:layout_marginTop="108dp"
+            android:layout_marginTop="88dp"
             android:layout_marginRight="60dp"
             android:background="@drawable/edit_text_bg"
             android:hint="Receiving Port"
@@ -126,6 +126,34 @@
             android:layout_marginRight="60dp"
             />
 
+        <TextView
+            android:id="@+id/encrypText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="En key: "
+            android:layout_below="@+id/targetPortText"
+            android:layout_marginTop="25dp"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:layout_marginLeft="30dp"/>
+
+        <EditText
+            android:id="@+id/encrypEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:hint="encryption key"
+            android:inputType="number"
+            android:background="@drawable/edit_text_bg"
+            android:padding="10dp"
+            android:textColor="#37474F"
+            android:textStyle="bold"
+            android:layout_below="@+id/targetPortEditText"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="130dp"
+            android:layout_marginRight="60dp"
+            />
+
 
 
         <Button
@@ -133,7 +161,7 @@
             android:layout_width="150dp"
             android:layout_height="50dp"
             android:onClick="onConnectClicked"
-            android:layout_below="@+id/targetPortEditText"
+            android:layout_below="@+id/encrypEditText"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="22dp"
             android:background="@drawable/rounded_corners"
@@ -183,11 +211,14 @@
         android:layout_below="@+id/appBarLayout"
         android:background="@drawable/background2">
 
+
         <ScrollView
             android:id="@+id/conversations"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/chat_linear_layout">
+            android:layout_above="@+id/chat_linear_layout"
+            android:layout_marginTop="5dp"
+            android:padding="5dp">
 
             <LinearLayout
                 android:id="@+id/scroll_view_linear_layout"
@@ -223,13 +254,13 @@
 
 
             <ImageButton
-                android:id="@+id/send_files_btn"
-                android:onClick="onSendFilesClicked"
+                android:id="@+id/send_files_and_voice_btn"
+                android:onClick="onSendFilesAndVoiceClicked"
                 android:layout_width="60dp"
                 android:layout_height="50dp"
-                android:src="@drawable/send_files"
+                android:src="@drawable/attachment"
                 android:layout_alignParentStart="true"
-                android:backgroundTint="#FFFFFF"
+                android:backgroundTint="@color/shada"
                 />
 
 
@@ -240,7 +271,7 @@
                 android:layout_marginStart="3dp"
                 android:layout_marginEnd="-1dp"
                 android:layout_toStartOf="@+id/send_message_btn"
-                android:layout_toEndOf="@+id/send_files_btn"
+                android:layout_toEndOf="@+id/send_files_and_voice_btn"
                 android:background="@drawable/edit_text_bg2"
                 android:hint="type message here..."
                 android:maxLines="5"
@@ -253,7 +284,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/send_message"
                 android:layout_alignParentEnd="true"
-                android:backgroundTint="#FFFFFF"
+                android:backgroundTint="@color/shada"
                 />
 
         </RelativeLayout>

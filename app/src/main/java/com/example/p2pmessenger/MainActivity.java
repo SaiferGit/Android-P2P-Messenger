@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.speech.RecognizerIntent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -42,12 +43,14 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText receivePortEditText, targetPortEditText, messageEditText, targetIPEditText;
+    EditText receivePortEditText, targetPortEditText, messageEditText, targetIPEditText, encrypKeyEditText;
     RelativeLayout secondLayout, firstLayout, thirdLayout;
     Button bgChange;
     ImageButton sendButton;
@@ -63,11 +66,11 @@ public class MainActivity extends AppCompatActivity {
 
     private Toolbar mToolbar; // for adding the toolbar
 
-    String filePath = null;
+    String filePath = null, ip = null;
 
     boolean colorbool = false;
 
-    int color = 0;
+    int shift = 0;
 
     Intent intent;
 
@@ -117,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
         targetPortEditText = findViewById(R.id.targetPortEditText);
         messageEditText = findViewById(R.id.messageEditText);
         targetIPEditText = findViewById(R.id.targetIPEditText);
+        encrypKeyEditText = findViewById(R.id.encrypEditText);
         //chatText = findViewById(R.id.chatText);
         firstLayout = findViewById(R.id.firstLayout);
         thirdLayout = findViewById(R.id.third_layout);
@@ -176,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String msg =  "bg@%@bg1";
-                sendReceive.write(caesarCipherEncryption(msg, 5));
+                sendReceive.write(caesarCipherEncryption(msg, shift));
                 Toast.makeText(MainActivity.this, "background is selected as LAYOUT 1", Toast.LENGTH_SHORT).show();
                 alertDialog.dismiss();
             }
@@ -186,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String msg =  "bg@%@bg2";
-                sendReceive.write(caesarCipherEncryption(msg, 5));
+                sendReceive.write(caesarCipherEncryption(msg,shift));
                 Toast.makeText(MainActivity.this, "background is selected as LAYOUT 2", Toast.LENGTH_SHORT).show();
                 alertDialog.dismiss();
             }
@@ -196,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String msg =  "bg@%@bg3";
-                sendReceive.write(caesarCipherEncryption(msg, 5));
+                sendReceive.write(caesarCipherEncryption(msg,shift));
                 Toast.makeText(MainActivity.this, "background is selected as LAYOUT 3", Toast.LENGTH_SHORT).show();
                 alertDialog.dismiss();
             }
@@ -206,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String msg =  "bg@%@bg4";
-                sendReceive.write(caesarCipherEncryption(msg, 5));
+                sendReceive.write(caesarCipherEncryption(msg, shift));
                 Toast.makeText(MainActivity.this, "background is selected as LAYOUT 4", Toast.LENGTH_SHORT).show();
                 alertDialog.dismiss();
             }
@@ -216,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String msg =  "bg@%@bg5";
-                sendReceive.write(caesarCipherEncryption(msg, 5));
+                sendReceive.write(caesarCipherEncryption(msg, shift));
                 Toast.makeText(MainActivity.this, "background is selected as LAYOUT 5", Toast.LENGTH_SHORT).show();
                 alertDialog.dismiss();
             }
@@ -226,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String msg =  "bg@%@bg6";
-                sendReceive.write(caesarCipherEncryption(msg, 5));
+                sendReceive.write(caesarCipherEncryption(msg, shift));
                 Toast.makeText(MainActivity.this, "background is selected as LAYOUT 6", Toast.LENGTH_SHORT).show();
                 alertDialog.dismiss();
             }
@@ -405,10 +409,55 @@ public class MainActivity extends AppCompatActivity {
         return time;
     }
 
-    public void onSendFilesClicked(View view) {
-        Intent intent = new Intent().setType("text/plain").setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select a TXT file"), 123);
+    public void onSendFilesAndVoiceClicked(View view) {
+        openFileandVoiceShareAlertDialog();
 
+
+    }
+
+    private void openFileandVoiceShareAlertDialog() {
+        final AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+        View mView = getLayoutInflater().inflate(R.layout.custom_file_voice_change_dialog, null);
+
+        Button btn_file = (Button) mView.findViewById(R.id.btn_file);
+        Button btn_voice = (Button) mView.findViewById(R.id.btn_voice);
+
+        alert.setView(mView);
+
+        final AlertDialog alertDialog = alert.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.setTitle("File and Voice Sharing");
+
+        btn_file.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent().setType("text/plain").setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select a TXT file"), 123);
+                alertDialog.dismiss();
+            }
+        });
+
+        btn_voice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                takeVoiceForHim();
+                alertDialog.dismiss();
+            }
+        });
+
+        alertDialog.show();
+    }
+
+    private void takeVoiceForHim() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, 10);
+        } else {
+            Toast.makeText(this, "Your Device Don't Support Speech Input", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -428,6 +477,15 @@ public class MainActivity extends AppCompatActivity {
 
             String writeMsg = "file@%@"+file.getName()+"@%@"+fileText;
             sendFilesALertDialog(writeMsg);
+        }
+
+        switch (requestCode) {
+            case 10:
+                if (resultCode == RESULT_OK && intent != null) {
+                    ArrayList<String> result = intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    messageEditText.setText(result.get(0));
+                }
+                break;
         }
     }
 
@@ -457,7 +515,7 @@ public class MainActivity extends AppCompatActivity {
         btn_yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendReceive.write(caesarCipherEncryption(writeMsg, 5));
+                sendReceive.write(caesarCipherEncryption(writeMsg, shift));
                 alertDialog.dismiss();
             }
         });
@@ -534,7 +592,11 @@ public class MainActivity extends AppCompatActivity {
             serverClass.socket.close();
 
             thirdLayout.setVisibility(View.GONE);
-            mToolbar.setVisibility(View.INVISIBLE);
+            mToolbar.setBackgroundColor(Color.parseColor("#335853"));
+            changeBG.setEnabled(false);
+            saveChat.setEnabled(false);
+            disconnect.setEnabled(false);
+            getSupportActionBar().setTitle("Chit Chat");
             firstLayout.setVisibility(View.VISIBLE);
 
             Toast.makeText(MainActivity.this, "chat is disconnected", Toast.LENGTH_SHORT).show();
@@ -548,18 +610,25 @@ public class MainActivity extends AppCompatActivity {
 
     public void onStartServerClicked(View v){
         String port = receivePortEditText.getText().toString();
+
         if(TextUtils.isEmpty(port)){
             receivePortEditText.requestFocus();
             receivePortEditText.setError("Please write your receive port first");
         }
+        else if((Integer.parseInt(port) >= 49152) && (Integer.parseInt(port) <= 65535)){
+            receivePortEditText.requestFocus();
+            receivePortEditText.setError("Please write your receive port between 49152 and 65535");
+        }
 
-        try{
-            serverClass = new ServerClass(Integer.parseInt(port));
-            serverClass.start();
-            Toast.makeText(this, "Server has been started..", Toast.LENGTH_SHORT).show();
+        else{
+            try{
+                serverClass = new ServerClass(Integer.parseInt(port));
+                serverClass.start();
+                Toast.makeText(this, "Server has been started..", Toast.LENGTH_SHORT).show();
 
-        }catch (Exception e){
-            Toast.makeText(MainActivity.this, "Can't start server, please check the port number first", Toast.LENGTH_SHORT).show();
+            }catch (Exception e){
+                Toast.makeText(MainActivity.this, "Can't start server, please check the port number first", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }
@@ -568,20 +637,35 @@ public class MainActivity extends AppCompatActivity {
 
         String port = targetPortEditText.getText().toString();
         String ip = targetIPEditText.getText().toString();
+        String encrypKey = encrypKeyEditText.getText().toString();
+        shift = Integer.parseInt(encrypKey);
+
+
 
         if(TextUtils.isEmpty(port)){
             targetPortEditText.requestFocus();
             targetPortEditText.setError("Please write your target port first");
         }
 
-        try{
-            clientClass = new ClientClass(ip, Integer.parseInt(port));
-            clientClass.start();
+        else if(targetIPEditText.equals(ip)){
+            targetPortEditText.requestFocus();
+            targetPortEditText.setError("This is your self IP, please change it");
+        }
 
-            Toast.makeText(MainActivity.this, "Client is connected to server", Toast.LENGTH_SHORT).show();
-        }catch (Exception e){
-            Log.d(TAG, "ERROR: "+e);
-            Toast.makeText(MainActivity.this, "Can't connect with server, please check all the requirements", Toast.LENGTH_SHORT).show();
+        if((Integer.parseInt(port) >= 49152) && (Integer.parseInt(port) <= 65535)){
+            receivePortEditText.requestFocus();
+            receivePortEditText.setError("Please write your target port between 49152 and 65535");
+        }
+
+        else{
+            try{
+                clientClass = new ClientClass(ip, Integer.parseInt(port));
+                clientClass.start();
+                Toast.makeText(MainActivity.this, "Client is connected to server", Toast.LENGTH_SHORT).show();
+            }catch (Exception e){
+                Log.d(TAG, "ERROR: "+e);
+                Toast.makeText(MainActivity.this, "Can't connect with server, please check all the requirements", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }
@@ -589,6 +673,7 @@ public class MainActivity extends AppCompatActivity {
     public void onSendClicked(View v){
 
         String msg = messageEditText.getText().toString();
+
         if(TextUtils.isEmpty(msg)){
             messageEditText.requestFocus();
             messageEditText.setError("Please write your message first");
@@ -596,24 +681,27 @@ public class MainActivity extends AppCompatActivity {
         else
         {
             //sendReceive.write("message@%@"+msg);
-            sendReceive.write(caesarCipherEncryption(msg, 5));
+            sendReceive.write(caesarCipherEncryption(msg, shift));
         }
 
     }
 
     public void onGetIPClicked(View view) {
         WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
-        String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+        ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
 
-        openIPAlertDialog(ip);
+        openIPAlertDialog();
     }
 
-    private void openIPAlertDialog(String ip) {
+    private void openIPAlertDialog() {
         final AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.custom_disconnect_dialog, null);
 
         TextView textView = mView.findViewById(R.id.custom_disconnect_dialog_textView);
-        textView.setText("Your IP Add is : "+ ip);
+        if( ip != null && ip != "")
+            textView.setText("Your IP Add is : "+ ip);
+        else
+            textView.setText("Can't get your IP address, please check your connectionn");
         Button btn_cancel = (Button) mView.findViewById(R.id.btn_cancel);
         Button btn_yes = (Button) mView.findViewById(R.id.btn_yes);
         btn_cancel.setVisibility(View.GONE);
@@ -751,7 +839,7 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(() -> {
                     TextView textView = new TextView(this);
 
-                    if (color == Color.parseColor("#FCE4EC") && !(caesarCipherDecryption(message, 5).contains("bg@%@bg"))) {
+                    if (color == Color.parseColor("#FCE4EC") && !(caesarCipherDecryption(message, shift).contains("bg@%@bg"))) {
                         textView.setPadding(200, 10, 10, 20);
                         textView.setMaxLines(5);
                         textView.setGravity(Gravity.RIGHT);
@@ -766,7 +854,7 @@ public class MainActivity extends AppCompatActivity {
                         textView.setLayoutParams(lp1);
 
                         //textView.setBackgroundResource(R.drawable.sender_messages_layout);
-                    } else if(!(caesarCipherDecryption(message, 5).contains("bg@%@bg"))) {
+                    } else if(!(caesarCipherDecryption(message, shift).contains("bg@%@bg"))) {
                         textView.setPadding(10, 10, 200, 20);
                         textView.setMaxLines(5);
                         textView.setGravity(Gravity.LEFT);
@@ -783,7 +871,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     textView.setTextColor(color);
                     Log.d(TAG, "encrypted msg: " + message);
-                    String actualMessage = caesarCipherDecryption(message, 5);
+                    String actualMessage = caesarCipherDecryption(message, shift);
                     Log.d(TAG, "decrypted msg: " + actualMessage);
 
                     String fileActual;
@@ -806,7 +894,6 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                     }
-
                     else if(actualMessage.contains("bg@%@bg")){
                         changeBGforHim(actualMessage);
                         textView.setPadding(0,0,0,0);

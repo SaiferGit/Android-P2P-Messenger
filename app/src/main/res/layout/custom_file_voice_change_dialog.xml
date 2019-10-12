@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp">
+
+    <TextView
+        android:id="@+id/custom_disconnect_dialog_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="What do you want to share?"
+        android:textSize="20sp"
+        android:textAlignment="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <Button
+            android:id="@+id/btn_file"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_orange"
+            android:text="Files"
+            android:drawableLeft="@drawable/file"
+            android:textColor="#FFFFFF"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="10dp"
+            android:textSize="20sp"
+            android:textAllCaps="false"
+            android:layout_weight="1"
+            android:textStyle="bold"/>
+
+        <Button
+            android:id="@+id/btn_voice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_yellow"
+            android:drawableLeft="@drawable/voice_icon"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="20dp"
+            android:textAllCaps="false"
+            android:text="Voice Msg"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:layout_weight="1"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+
+</LinearLayout>
