@@ -82,6 +82,7 @@
 ![pictuure18(chat history saved)](https://user-images.githubusercontent.com/44334473/66694872-61d6bf00-ecda-11e9-9051-15e471442dc2.jpg)
 <br/>
 - In the top right corner there has three menu option for <b> saving conversations, changing background and disconnect your chat with your current pair </b>.
+</br>
 <br/>
 ![photo_2019-10-12_10-24-55](https://user-images.githubusercontent.com/44334473/66694888-95194e00-ecda-11e9-9d75-d9a284a82e14.jpg)
 <br/>
