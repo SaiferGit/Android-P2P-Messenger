@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -15,11 +16,13 @@ import android.speech.RecognizerIntent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,6 +36,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Document;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -41,6 +46,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.lang.invoke.LambdaConversionException;
 import java.net.ServerSocket;
 import java.net.*;
 import java.util.ArrayList;
@@ -48,10 +54,12 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.Scanner;
 
+import okhttp3.internal.Util;
+
 public class MainActivity extends AppCompatActivity {
 
     EditText receivePortEditText, targetPortEditText, messageEditText, targetIPEditText, encrypKeyEditText;
-    RelativeLayout secondLayout, firstLayout, thirdLayout;
+    RelativeLayout firstLayout, thirdLayout;
     Button bgChange;
     ImageButton sendButton;
 
@@ -68,20 +76,19 @@ public class MainActivity extends AppCompatActivity {
 
     String filePath = null, ip = null;
 
-    boolean colorbool = false;
 
     int shift = 0;
 
-    Intent intent;
 
     static final int MESSAGE_READ=1;
-    static final String TAG = "yourTag";
+    static final String TAG = "trap";
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
+
 
     Handler handler=new Handler(new Handler.Callback() {
         @Override
@@ -99,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.demo_layout);
 
         initialization();
         //writeToFile("Hello :(", false);
@@ -114,25 +121,18 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Chit Chat"); // giving the title
 
-        //mToolbar.setVisibility(View.INVISIBLE);
 
         receivePortEditText = findViewById(R.id.receiveEditText);
         targetPortEditText = findViewById(R.id.targetPortEditText);
         messageEditText = findViewById(R.id.messageEditText);
         targetIPEditText = findViewById(R.id.targetIPEditText);
         encrypKeyEditText = findViewById(R.id.encrypEditText);
-        //chatText = findViewById(R.id.chatText);
         firstLayout = findViewById(R.id.firstLayout);
         thirdLayout = findViewById(R.id.third_layout);
-        //bgChange = findViewById(R.id.colorChangeButton);
         sendButton = findViewById(R.id.send_message_btn);
 
         conversations = findViewById(R.id.conversations);
         conversationLayout = findViewById(R.id.scroll_view_linear_layout);
-
-        //conversationLayout.setOrientation(LinearLayout.VERTICAL);
-        //conversations.addView(conversationLayout);
-
     }
 
     @Override
@@ -140,21 +140,13 @@ public class MainActivity extends AppCompatActivity {
         super.onOptionsItemSelected(item);
 
         if(item.getItemId() == R.id.main_change_bg_option)
-        {
-            // incomplete
             openChangeBGDialogBox();
-        }
 
         if(item.getItemId() == R.id.main_save_chat_option)
-        {
             openSaveChatDialogBoxForHim();
 
-        }
-
         if(item.getItemId() == R.id.main_disconnect_option)
-        {
             openDisconnectAlertDialogBox();
-        }
 
         return true;
     }
@@ -163,12 +155,15 @@ public class MainActivity extends AppCompatActivity {
         final AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.custom_background_change_dialog, null);
 
-        Button layout1 = (Button) mView.findViewById(R.id.btn_bg1);
-        Button layout2 = (Button) mView.findViewById(R.id.btn_bg2);
-        Button layout3 = (Button) mView.findViewById(R.id.btn_bg3);
-        Button layout4 = (Button) mView.findViewById(R.id.btn_bg4);
-        Button layout5 = (Button) mView.findViewById(R.id.btn_bg5);
-        Button layout6 = (Button) mView.findViewById(R.id.btn_bg6);
+        Button layout1 =  mView.findViewById(R.id.btn_bg1);
+        Button layout2 =  mView.findViewById(R.id.btn_bg2);
+        Button layout3 =  mView.findViewById(R.id.btn_bg3);
+        Button layout4 =  mView.findViewById(R.id.btn_bg4);
+        Button layout5 =  mView.findViewById(R.id.btn_bg5);
+        Button layout6 =  mView.findViewById(R.id.btn_bg6);
+        Button layout7 =  mView.findViewById(R.id.btn_bg7);
+        Button layout8 =  mView.findViewById(R.id.btn_bg8);
+        Button layout9 =  mView.findViewById(R.id.btn_bg9);
 
         alert.setView(mView);
 
@@ -176,64 +171,66 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.setCanceledOnTouchOutside(true);
         alertDialog.setTitle("Changing Background");
 
-        layout1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String msg =  "bg@%@bg1";
-                sendReceive.write(caesarCipherEncryption(msg, shift));
-                Toast.makeText(MainActivity.this, "background is selected as LAYOUT 1", Toast.LENGTH_SHORT).show();
-                alertDialog.dismiss();
-            }
+        layout1.setOnClickListener((v) -> {
+            String msg =  "bg@%@bg1";
+            sendReceive.write(caesarCipherEncryption(msg, shift));
+            Toast.makeText(MainActivity.this, "background is selected as LAYOUT 1", Toast.LENGTH_SHORT).show();
+            alertDialog.dismiss();
         });
 
-        layout2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String msg =  "bg@%@bg2";
-                sendReceive.write(caesarCipherEncryption(msg,shift));
-                Toast.makeText(MainActivity.this, "background is selected as LAYOUT 2", Toast.LENGTH_SHORT).show();
-                alertDialog.dismiss();
-            }
+        layout2.setOnClickListener((v) -> {
+            String msg =  "bg@%@bg2";
+            sendReceive.write(caesarCipherEncryption(msg,shift));
+            Toast.makeText(MainActivity.this, "background is selected as LAYOUT 2", Toast.LENGTH_SHORT).show();
+            alertDialog.dismiss();
         });
 
-        layout3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String msg =  "bg@%@bg3";
-                sendReceive.write(caesarCipherEncryption(msg,shift));
-                Toast.makeText(MainActivity.this, "background is selected as LAYOUT 3", Toast.LENGTH_SHORT).show();
-                alertDialog.dismiss();
-            }
+        layout3.setOnClickListener((v) -> {
+            String msg =  "bg@%@bg3";
+            sendReceive.write(caesarCipherEncryption(msg,shift));
+            Toast.makeText(MainActivity.this, "background is selected as LAYOUT 3", Toast.LENGTH_SHORT).show();
+            alertDialog.dismiss();
         });
 
-        layout4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String msg =  "bg@%@bg4";
-                sendReceive.write(caesarCipherEncryption(msg, shift));
-                Toast.makeText(MainActivity.this, "background is selected as LAYOUT 4", Toast.LENGTH_SHORT).show();
-                alertDialog.dismiss();
-            }
+        layout4.setOnClickListener((v) -> {
+            String msg =  "bg@%@bg4";
+            sendReceive.write(caesarCipherEncryption(msg, shift));
+            Toast.makeText(MainActivity.this, "background is selected as LAYOUT 4", Toast.LENGTH_SHORT).show();
+            alertDialog.dismiss();
+        });
+        layout5.setOnClickListener((v)-> {
+            String msg =  "bg@%@bg5";
+            sendReceive.write(caesarCipherEncryption(msg, shift));
+            Toast.makeText(MainActivity.this, "background is selected as LAYOUT 5", Toast.LENGTH_SHORT).show();
+            alertDialog.dismiss();
         });
 
-        layout5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String msg =  "bg@%@bg5";
-                sendReceive.write(caesarCipherEncryption(msg, shift));
-                Toast.makeText(MainActivity.this, "background is selected as LAYOUT 5", Toast.LENGTH_SHORT).show();
-                alertDialog.dismiss();
-            }
+        layout6.setOnClickListener((v) -> {
+            String msg =  "bg@%@bg6";
+            sendReceive.write(caesarCipherEncryption(msg, shift));
+            Toast.makeText(MainActivity.this, "background is selected as LAYOUT 6", Toast.LENGTH_SHORT).show();
+            alertDialog.dismiss();
         });
 
-        layout6.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String msg =  "bg@%@bg6";
-                sendReceive.write(caesarCipherEncryption(msg, shift));
-                Toast.makeText(MainActivity.this, "background is selected as LAYOUT 6", Toast.LENGTH_SHORT).show();
-                alertDialog.dismiss();
-            }
+        layout7.setOnClickListener((v) -> {
+            String msg =  "bg@%@bg7";
+            sendReceive.write(caesarCipherEncryption(msg, shift));
+            Toast.makeText(MainActivity.this, "background is selected as LAYOUT 7", Toast.LENGTH_SHORT).show();
+            alertDialog.dismiss();
+        });
+
+        layout8.setOnClickListener((v) -> {
+            String msg =  "bg@%@bg8";
+            sendReceive.write(caesarCipherEncryption(msg, shift));
+            Toast.makeText(MainActivity.this, "background is selected as LAYOUT 8", Toast.LENGTH_SHORT).show();
+            alertDialog.dismiss();
+        });
+
+        layout9.setOnClickListener((v) -> {
+            String msg =  "bg@%@bg9";
+            sendReceive.write(caesarCipherEncryption(msg, shift));
+            Toast.makeText(MainActivity.this, "background is selected as LAYOUT 9", Toast.LENGTH_SHORT).show();
+            alertDialog.dismiss();
         });
 
         alertDialog.show();
@@ -244,38 +241,44 @@ public class MainActivity extends AppCompatActivity {
 
         if(msg.equals("bg@%@bg1")){
             thirdLayout.setBackgroundResource(R.drawable.background1);
-            mToolbar.setBackgroundColor(Color.parseColor("#FF4500"));
-            Toast.makeText(MainActivity.this, "background changed!!", Toast.LENGTH_SHORT).show();
+            mToolbar.setBackgroundColor(Color.parseColor("#8B0000"));
         }
 
         else if(msg.equals("bg@%@bg2")){
             thirdLayout.setBackgroundResource(R.drawable.background2);
-            mToolbar.setBackgroundColor(Color.parseColor("#2B978C"));
-            Toast.makeText(MainActivity.this, "background changed!!", Toast.LENGTH_SHORT).show();
+            mToolbar.setBackgroundColor(Color.parseColor("#461D3D"));
         }
 
         else if(msg.equals("bg@%@bg3")){
-            thirdLayout.setBackgroundResource(R.drawable.background3);
-            mToolbar.setBackgroundColor(Color.parseColor("#3F515b"));
-            Toast.makeText(MainActivity.this, "background changed!!", Toast.LENGTH_SHORT).show();
+            thirdLayout.setBackgroundResource(R.drawable.background10);
+            mToolbar.setBackgroundColor(Color.parseColor("#B0CA4590"));
         }
 
         else if(msg.equals("bg@%@bg4")){
             thirdLayout.setBackgroundResource(R.drawable.background4);
-            mToolbar.setBackgroundColor(Color.parseColor("#29A2CA"));
-            Toast.makeText(MainActivity.this, "background changed!!", Toast.LENGTH_SHORT).show();
+            mToolbar.setBackgroundColor(Color.parseColor("#30504C"));
         }
 
         else if(msg.equals("bg@%@bg5")){
             thirdLayout.setBackgroundResource(R.drawable.background5);
-            mToolbar.setBackgroundColor(Color.parseColor("#F81894"));
-            Toast.makeText(MainActivity.this, "background changed!!", Toast.LENGTH_SHORT).show();
+            mToolbar.setBackgroundColor(Color.parseColor("#30504C"));
         }
 
         else if(msg.equals("bg@%@bg6")){
             thirdLayout.setBackgroundResource(R.drawable.background6);
-            mToolbar.setBackgroundColor(Color.parseColor("#F9A602"));
-            Toast.makeText(MainActivity.this, "background changed!!", Toast.LENGTH_SHORT).show();
+            mToolbar.setBackgroundColor(Color.parseColor("#461D3D"));
+        }
+        else if(msg.equals("bg@%@bg7")){
+            thirdLayout.setBackgroundResource(R.drawable.background7);
+            mToolbar.setBackgroundColor(Color.parseColor("#2E3F3B"));
+        }
+        else if(msg.equals("bg@%@bg8")){
+            thirdLayout.setBackgroundResource(R.drawable.background8);
+            mToolbar.setBackgroundColor(Color.parseColor("#DBAC30"));
+        }
+        else if(msg.equals("bg@%@bg9")){
+            thirdLayout.setBackgroundResource(R.drawable.background9);
+            mToolbar.setBackgroundColor(Color.parseColor("#095061"));
         }
     }
 
@@ -369,7 +372,7 @@ public class MainActivity extends AppCompatActivity {
         File file;
 
         if(time.equals(""))
-            file = new File(path, name + System.lineSeparator() + ".txt");
+            file = new File(path, name);
 
         else
             file = new File(path, name + "(" + time + ")" + System.lineSeparator() + ".txt");
@@ -578,6 +581,8 @@ public class MainActivity extends AppCompatActivity {
         btn_yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sendReceive.write(caesarCipherEncryption("diconnect@%@d", shift));
+                Log.d(TAG, "Disconnect Msg: " +caesarCipherEncryption("diconnect@%@d", shift));
                 disconnectHim();
                 alertDialog.dismiss();
             }
@@ -587,12 +592,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void disconnectHim() {
+
         try {
+            sendReceive.socket.close();
             clientClass.socket.close();
             serverClass.socket.close();
 
+
             thirdLayout.setVisibility(View.GONE);
-            mToolbar.setBackgroundColor(Color.parseColor("#335853"));
+            mToolbar.setBackgroundColor(Color.parseColor("#233E4E"));
+            thirdLayout.setBackgroundResource(R.drawable.background3);
             changeBG.setEnabled(false);
             saveChat.setEnabled(false);
             disconnect.setEnabled(false);
@@ -647,15 +656,11 @@ public class MainActivity extends AppCompatActivity {
             targetPortEditText.setError("Please write your target port first");
         }
 
-        else if(targetIPEditText.equals(ip)){
+        else if(targetIPEditText.equals(Utils.getIPAddress(false))){
             targetPortEditText.requestFocus();
             targetPortEditText.setError("This is your self IP, please change it");
         }
 
-        if((Integer.parseInt(port) >= 49152) && (Integer.parseInt(port) <= 65535)){
-            receivePortEditText.requestFocus();
-            receivePortEditText.setError("Please write your target port between 49152 and 65535");
-        }
 
         else{
             try{
@@ -687,9 +692,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onGetIPClicked(View view) {
-        WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
-        ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
 
+        ip = Utils.getIPAddress(true);
         openIPAlertDialog();
     }
 
@@ -839,32 +843,39 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(() -> {
                     TextView textView = new TextView(this);
 
-                    if (color == Color.parseColor("#FCE4EC") && !(caesarCipherDecryption(message, shift).contains("bg@%@bg"))) {
+                    if (color == Color.parseColor("#FCE4EC")
+                            && !(caesarCipherDecryption(message, shift).contains("bg@%@bg"))
+                            && !(caesarCipherDecryption(message, shift).contains("diconnect@%@d"))
+                            && !(caesarCipherDecryption(message, shift).contains("file@%@"))) {
                         textView.setPadding(200, 10, 10, 20);
                         textView.setMaxLines(5);
                         textView.setGravity(Gravity.RIGHT);
                         textView.setBackgroundResource(R.drawable.sender_messages_layout);
+                        textView.setTextIsSelectable(true);
 
                         LinearLayout.LayoutParams lp1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                         // lp1.setMargins(10, 10, 10, 10);
-                       // lp1.setMargins(10, 10, 10, 10);
+                        // lp1.setMargins(10, 10, 10, 10);
                         //lp1.width = 400;
-                        lp1.leftMargin = 180;
+                        lp1.leftMargin = 200;
                         //lp1.rightMargin = 50;
                         textView.setLayoutParams(lp1);
 
                         //textView.setBackgroundResource(R.drawable.sender_messages_layout);
-                    } else if(!(caesarCipherDecryption(message, shift).contains("bg@%@bg"))) {
+                    } else if(!(caesarCipherDecryption(message, shift).contains("bg@%@bg"))
+                            && !(caesarCipherDecryption(message, shift).contains("diconnect@%@d"))
+                            && !(caesarCipherDecryption(message, shift).contains("file@%@"))) {
                         textView.setPadding(10, 10, 200, 20);
                         textView.setMaxLines(5);
                         textView.setGravity(Gravity.LEFT);
                         textView.setBackgroundResource(R.drawable.receiver_messages_layout);
+                        textView.setTextIsSelectable(true);
 
                         LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                         //lp1.setMargins(10, 10, 10, 10);
                         //lp1.width = 400;
                         //lp1.leftMargin = 150;
-                        lp2.rightMargin = 180;
+                        lp2.rightMargin = 200;
                         textView.setLayoutParams(lp2);
 
 
@@ -874,20 +885,22 @@ public class MainActivity extends AppCompatActivity {
                     String actualMessage = caesarCipherDecryption(message, shift);
                     Log.d(TAG, "decrypted msg: " + actualMessage);
 
-                    String fileActual;
+
                     String[]  messages = actualMessage.split("@%@", 0);
 
                     if(messages[0].equals("file")){
                         textView.setPadding(0,0,0,0);
 
-                        textView.setTextSize(13);
+                        textView.setTextSize(15);
+                        textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
                         conversationLayout.setGravity(View.TEXT_ALIGNMENT_CENTER);
                         textView.setGravity(Gravity.CENTER);
+
 
                         Log.d(TAG, "File Name: "+messages[1]);
                         Log.d(TAG, "File Contains:\n "+messages[2]);
                         if(color == Color.parseColor("#FCE4EC"))
-                              textView.setText(messages[1]+" has been sent");
+                            textView.setText(messages[1]+" has been sent");
                         else{
                             textView.setText(messages[1]+" has been received and downloaded on android/data/com.example.p2p/");
                             writeToFile(messages[2], false, messages[1]);
@@ -899,9 +912,21 @@ public class MainActivity extends AppCompatActivity {
                         textView.setPadding(0,0,0,0);
 
                         textView.setTextSize(13);
+                        textView.setTextSize(15);
+                        textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
                         conversationLayout.setGravity(View.TEXT_ALIGNMENT_CENTER);
                         textView.setGravity(Gravity.CENTER);
                         textView.setText("Background has been changed");
+                    }
+
+                    else if(actualMessage.contains("diconnect@%@d")){
+                        textView.setPadding(0,0,0,0);
+
+                        textView.setTextSize(13);
+                        conversationLayout.setGravity(View.TEXT_ALIGNMENT_CENTER);
+                        textView.setGravity(Gravity.CENTER);
+                        textView.setText("Your Pair has been disconnected.");
+
                     }
                     //String actualMessage = editMessage(message);
                     else{
@@ -910,18 +935,24 @@ public class MainActivity extends AppCompatActivity {
                         textView.setText(actualMessage);
                     }
 
-                    // creating divider between
-                    ImageView divider = new ImageView(this);
-                    conversationLayout.addView(divider);
-                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    lp.setMargins(9, 9, 9, 9);
-                    divider.setLayoutParams(lp);
-                    divider.setBackgroundColor(Color.TRANSPARENT);
+
+                    // creating divider between two messages
+                    addDividerBetweenTwoMessages();
+
 
                     conversationLayout.addView(textView);
                     conversations.post(() -> conversations.fullScroll(View.FOCUS_DOWN));
                 }
         );
+    }
+
+    private void addDividerBetweenTwoMessages() {
+        ImageView divider = new ImageView(this);
+        conversationLayout.addView(divider);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(9, 9, 9, 9);
+        divider.setLayoutParams(lp);
+        divider.setBackgroundColor(Color.TRANSPARENT);
     }
 
 

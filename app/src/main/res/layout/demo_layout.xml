@@ -1,160 +1,248 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@drawable/opening_screen_bg2">
 
-    <EditText
-        android:id="@+id/targetPortEditText"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:ems="10"
-        android:hint="Target Port"
-        android:inputType="number"
-        android:text="888"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/targetIPEditText"
-        app:layout_constraintTop_toBottomOf="@+id/targetIPEditText"
-        app:layout_constraintVertical_bias="0.0" />
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/receiveEditText"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:hint="Receive Port"
-        android:inputType="number"
-        android:text="888"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.16"
-        app:layout_constraintStart_toEndOf="@+id/receivingPortText"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        <!-- including the toolbar from app bar layout -->
+        <include
+            android:id="@+id/main_page_toolbar"
+            layout="@layout/app_bar_layout">
+        </include>
 
-    <EditText
-        android:id="@+id/targetIPEditText"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:ems="10"
-        android:hint="Target IP"
-        android:inputType="textPersonName"
-        android:text="localhost"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/receiveEditText"
-        app:layout_constraintTop_toBottomOf="@+id/hostButton"
-        app:layout_constraintVertical_bias="0.0" />
+    </android.support.design.widget.AppBarLayout>
 
-    <EditText
-        android:id="@+id/messageEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:enabled="false"
-        android:hint="Message"
-        android:inputType="textPersonName"
-        android:text="Hello"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/sendButton"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/conversations"
-        app:layout_constraintVertical_bias="0.68" />
-
-    <Button
-        android:id="@+id/sendButton"
+    <RelativeLayout
+        android:id="@+id/firstLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:enabled="false"
-        android:onClick="onSendClicked"
-        android:text="Send"
-        app:layout_constraintBottom_toBottomOf="@+id/messageEditText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/messageEditText"
-        app:layout_constraintVertical_bias="0.0" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="170dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:visibility="visible">
 
-    <ScrollView
-        android:id="@+id/conversations"
-        android:layout_width="0dp"
-        android:layout_height="170dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/connectButton"
-        app:layout_constraintVertical_bias="0.0"
+        <EditText
+            android:id="@+id/receiveEditText"
+            android:layout_width="255dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/edit_text_bg"
+            android:hint="Receiving Port"
+            android:inputType="number"
+            android:padding="10dp"
+            android:textColor="#37474F"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/hostButton"
+            android:layout_width="130dp"
+            android:layout_height="45dp"
+            android:onClick="onStartServerClicked"
+            android:layout_below="@+id/receiveEditText"
+            android:layout_marginLeft="200dp"
+            android:layout_marginTop="11dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/rounded_corners"
+            android:padding="2dp"
+            android:text="Start Server"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:textColor="@android:color/background_light"
+            android:textSize="19sp" />
+
+        <EditText
+            android:id="@+id/targetIPEditText"
+            android:layout_width="255dp"
+            android:layout_height="wrap_content"
+            android:hint="Target IP"
+            android:inputType="text"
+            android:background="@drawable/edit_text_bg"
+            android:padding="10dp"
+            android:textColor="#37474F"
+            android:textStyle="bold"
+            android:layout_below="@+id/hostButton"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            />
+
+        <EditText
+            android:id="@+id/targetPortEditText"
+            android:layout_width="255dp"
+            android:layout_height="wrap_content"
+            android:hint="Target Port"
+            android:inputType="number"
+            android:background="@drawable/edit_text_bg"
+            android:padding="10dp"
+            android:textColor="#37474F"
+            android:textStyle="bold"
+            android:layout_below="@+id/targetIPEditText"
+            android:layout_marginTop="5dp"
+            android:layout_centerHorizontal="true"
+            />
+
+        <EditText
+            android:id="@+id/encrypEditText"
+            android:layout_width="255dp"
+            android:layout_height="wrap_content"
+            android:hint="Encryption key"
+            android:inputType="number"
+            android:background="@drawable/edit_text_bg"
+            android:padding="10dp"
+            android:textColor="#37474F"
+            android:textStyle="bold"
+            android:layout_below="@+id/targetPortEditText"
+            android:layout_marginTop="5dp"
+            android:layout_centerHorizontal="true"
+            />
+
+        <Button
+            android:id="@+id/connectButton"
+            android:layout_width="130dp"
+            android:layout_height="45dp"
+            android:onClick="onConnectClicked"
+            android:layout_below="@+id/encrypEditText"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="11dp"
+            android:background="@drawable/rounded_corners"
+            android:padding="5dp"
+            android:text="Connect"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:textColor="@android:color/background_light"
+            android:textSize="19sp" />
+
+        <TextView
+            android:id="@+id/click_here"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/connectButton"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:textColor="@color/shada"
+            android:text="Don't know your IP address? click here to know"
+            android:textSize="18sp"
+            android:textStyle="bold|italic"
+            />
+
+        <Button
+            android:id="@+id/getIPButton"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:onClick="onGetIPClicked"
+            android:layout_below="@+id/click_here"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="22dp"
+            android:background="@drawable/rounded_corners"
+            android:padding="5dp"
+            android:text="Get IP"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:textColor="@android:color/background_light"
+            android:textSize="21sp" />
 
 
-        />
 
-    <Button
-        android:id="@+id/hostButton"
-        android:layout_width="wrap_content"
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/third_layout"
+        android:visibility="gone"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="onStartServerClicked"
-        android:text="Start Server"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/receiveEditText"
-        app:layout_constraintVertical_bias="0.0" />
+        android:layout_below="@+id/appBarLayout"
+        android:background="@drawable/background3">
 
-    <Button
-        android:id="@+id/connectButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onConnectClicked"
-        android:text="Connect"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/targetPortEditText"
-        app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-        android:id="@+id/receivingPortText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Receiving Port"
-        android:textColor="#000000"
-        app:layout_constraintBottom_toBottomOf="@+id/receiveEditText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/receiveEditText" />
+        <ScrollView
+            android:id="@+id/conversations"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/chat_linear_layout"
+            android:layout_marginTop="5dp"
+            android:padding="5dp">
 
-    <TextView
-        android:id="@+id/targetIPText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Target IP"
-        android:textColor="#000000"
-        app:layout_constraintBottom_toBottomOf="@+id/targetIPEditText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hostButton" />
 
-    <TextView
-        android:id="@+id/targetPortText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Target Port"
-        android:textColor="#000000"
-        app:layout_constraintBottom_toTopOf="@+id/connectButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/targetPortEditText" />
 
-</android.support.constraint.ConstraintLayout>
+            <LinearLayout
+                android:id="@+id/scroll_view_linear_layout"
+                android:divider="@drawable/empty_tall_divider"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </LinearLayout>
+
+
+
+        </ScrollView>
+
+        <!--
+        <TextView
+            android:id="@+id/chatText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="Text View"
+            android:textStyle="bold"
+            />
+        !-->
+        <RelativeLayout
+            android:id="@+id/chat_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            >
+
+
+            <ImageButton
+                android:id="@+id/send_files_and_voice_btn"
+                android:onClick="onSendFilesAndVoiceClicked"
+                android:layout_width="60dp"
+                android:layout_height="50dp"
+                android:src="@drawable/attachment"
+                android:layout_alignParentStart="true"
+                android:backgroundTint="@color/shada"
+                />
+
+
+            <EditText
+                android:id="@+id/messageEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="-1dp"
+                android:layout_toStartOf="@+id/send_message_btn"
+                android:layout_toEndOf="@+id/send_files_and_voice_btn"
+                android:background="@drawable/edit_text_bg2"
+                android:hint="type message here..."
+                android:maxLines="5"
+                android:padding="10dp" />
+
+            <ImageButton
+                android:id="@+id/send_message_btn"
+                android:layout_width="60dp"
+                android:onClick="onSendClicked"
+                android:layout_height="wrap_content"
+                android:src="@drawable/send_message"
+                android:layout_alignParentEnd="true"
+                android:backgroundTint="@color/shada"
+                />
+
+        </RelativeLayout>
+
+
+
+    </RelativeLayout>
+
+</RelativeLayout>
