@@ -3,6 +3,8 @@
 #### Youtube Link of how our app works:
 ChitCat P2P Messeging App <b>[ [watch now](https://github.com/SaiferGit/p2p-messenger/chitChat.apk) ] </b>
 
+### To know detail, go to readme.txt
+
 # Some Snapshots:
 
 ![](https://user-images.githubusercontent.com/44334473/66875097-eec99300-efce-11e9-97c7-8ee44266fd46.png)
