@@ -1,6 +1,7 @@
 package com.example.p2pmessenger;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -27,6 +28,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -63,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     Button bgChange;
     ImageButton sendButton;
 
-    MenuItem changeBG, saveChat, disconnect;
+    MenuItem changeBG, saveChat, disconnect, removeAllChat;
 
     ServerClass serverClass;
     ClientClass clientClass;
@@ -148,7 +151,67 @@ public class MainActivity extends AppCompatActivity {
         if(item.getItemId() == R.id.main_disconnect_option)
             openDisconnectAlertDialogBox();
 
+        if(item.getItemId() == R.id.main_remove_chat_option)
+            openRemoveAllChatAlertDialogBox();
+
         return true;
+    }
+
+    private void openRemoveAllChatAlertDialogBox() {
+        final AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+        View mView = getLayoutInflater().inflate(R.layout.custom_remove_all_chat_dialog, null);
+
+
+        CheckBox cbRemoveForAll = mView.findViewById(R.id.remove_for_all);
+
+        Button btn_cancel = (Button) mView.findViewById(R.id.btn_cancel);
+        Button btn_clear_messages = (Button) mView.findViewById(R.id.btn_clear_messages);
+
+        alert.setView(mView);
+
+        final AlertDialog alertDialog = alert.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.setTitle("Removing All Chat");
+
+        cbRemoveForAll.setOnClickListener((v) -> {
+            if(cbRemoveForAll.isSelected()){
+                cbRemoveForAll.setBackgroundColor(Color.parseColor("#358856"));
+                cbRemoveForAll.setTextColor(Color.parseColor("#358856"));
+            }
+        });
+
+
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Cancelled", Toast.LENGTH_SHORT).show();
+                alertDialog.dismiss();
+            }
+        });
+
+        btn_clear_messages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(cbRemoveForAll.isChecked()){
+                    // do something
+                    sendReceive.write(caesarCipherEncryption("remove@%@", shift));
+                }
+                removeAllChatForHim();
+                //sendReceive.write(caesarCipherEncryption("diconnect@%@d", shift));
+                Log.d(TAG, "Remove all chat Msg: " +caesarCipherEncryption("diconnect@%@d", shift));
+                //disconnectHim();
+                alertDialog.dismiss();
+            }
+        });
+
+        alertDialog.show();
+    }
+
+    private void removeAllChatForHim() {
+        String allMessage = "";
+        conversationLayout.removeAllViews();
+        Toast.makeText(this, "All chat have been removed!", Toast.LENGTH_SHORT).show();
+
     }
 
     private void openChangeBGDialogBox() {
@@ -292,12 +355,13 @@ public class MainActivity extends AppCompatActivity {
 
         changeBG = menu.findItem(R.id.main_change_bg_option);
         saveChat = menu.findItem(R.id.main_save_chat_option);
-
         disconnect = menu.findItem(R.id.main_disconnect_option);
+        removeAllChat = menu.findItem(R.id.main_remove_chat_option);
 
         changeBG.setEnabled(false);
         saveChat.setEnabled(false);
         disconnect.setEnabled(false);
+        removeAllChat.setEnabled(false);
 
         return true;
     }
@@ -624,10 +688,7 @@ public class MainActivity extends AppCompatActivity {
             receivePortEditText.requestFocus();
             receivePortEditText.setError("Please write your receive port first");
         }
-        else if((Integer.parseInt(port) >= 49152) && (Integer.parseInt(port) <= 65535)){
-            receivePortEditText.requestFocus();
-            receivePortEditText.setError("Please write your receive port between 49152 and 65535");
-        }
+
 
         else{
             try{
@@ -645,7 +706,7 @@ public class MainActivity extends AppCompatActivity {
     public void onConnectClicked(View v){
 
         String port = targetPortEditText.getText().toString();
-        String ip = targetIPEditText.getText().toString();
+        String tergetIP = targetIPEditText.getText().toString();
         String encrypKey = encrypKeyEditText.getText().toString();
         shift = Integer.parseInt(encrypKey);
 
@@ -656,17 +717,17 @@ public class MainActivity extends AppCompatActivity {
             targetPortEditText.setError("Please write your target port first");
         }
 
-        else if(targetIPEditText.equals(Utils.getIPAddress(false))){
-            targetPortEditText.requestFocus();
-            targetPortEditText.setError("This is your self IP, please change it");
+        else if(tergetIP.equals(ip)){
+            targetIPEditText.requestFocus();
+            targetIPEditText.setError("This is your self IP, please change it");
         }
 
 
         else{
             try{
-                clientClass = new ClientClass(ip, Integer.parseInt(port));
+                clientClass = new ClientClass(tergetIP, Integer.parseInt(port));
                 clientClass.start();
-                Toast.makeText(MainActivity.this, "Client is connected to server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "your sending port and listening port has been set successfully", Toast.LENGTH_SHORT).show();
             }catch (Exception e){
                 Log.d(TAG, "ERROR: "+e);
                 Toast.makeText(MainActivity.this, "Can't connect with server, please check all the requirements", Toast.LENGTH_SHORT).show();
@@ -907,6 +968,22 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                     }
+                    else if(messages[0].equals("remove")){
+                        textView.setPadding(0,0,0,0);
+
+                        textView.setTextSize(15);
+                        textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
+                        conversationLayout.setGravity(View.TEXT_ALIGNMENT_CENTER);
+                        textView.setGravity(Gravity.CENTER);
+                        removeAllChatForHim();
+
+                        if(color == Color.parseColor("#FCE4EC"))
+                            textView.setText("You have been removed all the previous message");
+                        else{
+                            textView.setText("Your pair has been removed all the previous message");
+                        }
+
+                    }
                     else if(actualMessage.contains("bg@%@bg")){
                         changeBGforHim(actualMessage);
                         textView.setPadding(0,0,0,0);
@@ -967,6 +1044,7 @@ public class MainActivity extends AppCompatActivity {
             saveChat.setEnabled(true);
             changeBG.setEnabled(true);
             disconnect.setEnabled(true);
+            removeAllChat.setEnabled(true);
         });
     }
 

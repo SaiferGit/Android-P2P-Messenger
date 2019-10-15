@@ -29,4 +29,13 @@
 
     </item>
 
+    <item
+        android:title="Remove All Chat"
+        android:id="@+id/main_remove_chat_option"
+        app:showAsAction="never"
+        >
+        <!-- user click korlei jate ashe -->
+
+    </item>
+
 </menu>
