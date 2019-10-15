@@ -456,7 +456,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, e.toString());
         }
     }
-    
+
 
     private String getTime() {
         int minute, hour, second;
