@@ -661,7 +661,7 @@ public class MainActivity extends AppCompatActivity {
     public void disconnectHim() {
 
         try {
-            sendReceive.socket.close();
+            //sendReceive.socket.close();
             clientClass.socket.close();
             serverClass.socket.close();
 

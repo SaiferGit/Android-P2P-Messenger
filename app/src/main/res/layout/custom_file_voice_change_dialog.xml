@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_yellow"
             android:drawableLeft="@drawable/voice_icon"
-            android:layout_marginStart="30dp"
+            android:layout_marginStart="25dp"
             android:layout_marginEnd="20dp"
             android:textAllCaps="false"
             android:text="Voice Msg"
