@@ -172,13 +172,14 @@ public class MainActivity extends AppCompatActivity {
         final AlertDialog alertDialog = alert.create();
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.setTitle("Removing All Chat");
-
-        cbRemoveForAll.setOnClickListener((v) -> {
-            if(cbRemoveForAll.isSelected()){
-                cbRemoveForAll.setBackgroundColor(Color.parseColor("#358856"));
-                cbRemoveForAll.setTextColor(Color.parseColor("#358856"));
+        cbRemoveForAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) buttonView.setTextColor(getResources().getColor(R.color.green));
+                else buttonView.setTextColor(getResources().getColor(R.color.black));
             }
         });
+
 
 
         btn_cancel.setOnClickListener(new View.OnClickListener() {
@@ -432,6 +433,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         File path = this.getExternalFilesDir(null);
+        filePath = path.toString();
 
         File file;
 
@@ -454,6 +456,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, e.toString());
         }
     }
+    
 
     private String getTime() {
         int minute, hour, second;
@@ -537,7 +540,7 @@ public class MainActivity extends AppCompatActivity {
             if(file.exists())
                 Log.d(TAG, "Selected file exists");
             else
-                Log.e(TAG, "Selected file doesn't exists");
+                Toast.makeText(this, "Selected file doesn't exists", Toast.LENGTH_SHORT).show();
 
             String fileText = readTextFile(uri);
             Log.d(TAG, "text inside file: "+fileText);

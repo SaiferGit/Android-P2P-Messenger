@@ -4,8 +4,10 @@
     <color name="colorPrimaryDark">#192D3A</color>
     <color name="colorAccent">#558D85</color>
     <color name="shada">#ffffff</color>
-    <color name="greenish">#343655</color>
-0
+    <color name="green">#41998F</color>
+    <color name="black">#000000</color>
+
+
 
     <color name="gray">#d3d3d3</color>
 </resources>
