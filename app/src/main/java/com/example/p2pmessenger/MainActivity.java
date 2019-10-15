@@ -907,7 +907,8 @@ public class MainActivity extends AppCompatActivity {
                     if (color == Color.parseColor("#FCE4EC")
                             && !(caesarCipherDecryption(message, shift).contains("bg@%@bg"))
                             && !(caesarCipherDecryption(message, shift).contains("diconnect@%@d"))
-                            && !(caesarCipherDecryption(message, shift).contains("file@%@"))) {
+                            && !(caesarCipherDecryption(message, shift).contains("file@%@"))
+                            && !(caesarCipherDecryption(message, shift).contains("remove@%@"))) {
                         textView.setPadding(200, 10, 10, 20);
                         textView.setMaxLines(5);
                         textView.setGravity(Gravity.RIGHT);
@@ -925,7 +926,8 @@ public class MainActivity extends AppCompatActivity {
                         //textView.setBackgroundResource(R.drawable.sender_messages_layout);
                     } else if(!(caesarCipherDecryption(message, shift).contains("bg@%@bg"))
                             && !(caesarCipherDecryption(message, shift).contains("diconnect@%@d"))
-                            && !(caesarCipherDecryption(message, shift).contains("file@%@"))) {
+                            && !(caesarCipherDecryption(message, shift).contains("file@%@"))
+                            && !(caesarCipherDecryption(message, shift).contains("remove@%@"))) {
                         textView.setPadding(10, 10, 200, 20);
                         textView.setMaxLines(5);
                         textView.setGravity(Gravity.LEFT);

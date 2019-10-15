@@ -32,6 +32,7 @@
             android:layout_height="wrap_content"
             android:text="Cancel"
             android:textColor="#FFFFFF"
+            android:background="@drawable/rounded_red"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:textSize="18sp"
@@ -42,14 +43,14 @@
             android:id="@+id/btn_clear_messages"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="10dp"
-            android:text="Clear Messages"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/rounded_green"
+            android:text="Clear Chat"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:layout_weight="1"
-            android:textStyle="bold"
-            android:gravity="left"/>
+            android:textStyle="bold"/>
 
     </LinearLayout>
 
