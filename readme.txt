@@ -53,8 +53,9 @@
 		|________________________________________|__________________________________________|
 	
 
-	        [ A demo example is given here(showing how to run and how the app works) in this link: 
-		  // youtube link here ]
+	        [ A demo example is given here(showing how to run and how the app works) as: 
+		   part1.webm & part2.webm. you can find it on the main directory of our zip, 
+		   inside the folder named "app demo videos" just where you find this readme.txt]
 		_____________________________________________________________________________________
 		|>>>>>>>>>>>>>>>>>>>>             How to run this app?         <<<<<<<<<<<<<<<<<<<<<|
 		|_______|___________________________________________________________________________|                  
@@ -62,7 +63,7 @@
 		|-------|---------------------------------------------------------------------------|
 		|    2. |   Open the APK that named ChitChat.apk in your taken androids(use data    |
 		|       | cable to take it in your phone and install it), you can find it on the    |
-		|       | following  location: 							    |
+		|       | following  location: 	(just where you find this readme.txt)		    |
 		|	|     https://github.com/SaiferGit/p2p-messenger/blob/master/chitchat.apk   |
 		|-------|---------------------------------------------------------------------------|
 		|    3. |   Once you run the app you can see the following fields:                  |
