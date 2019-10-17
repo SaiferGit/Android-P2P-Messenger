@@ -29,7 +29,7 @@
         <Button
             android:id="@+id/btn_cancel"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:text="Cancel"
             android:textColor="#FFFFFF"
             android:background="@drawable/rounded_red"
@@ -42,7 +42,7 @@
         <Button
             android:id="@+id/btn_clear_messages"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/rounded_green"

@@ -63,10 +63,11 @@ public class MainActivity extends AppCompatActivity {
 
     EditText receivePortEditText, targetPortEditText, messageEditText, targetIPEditText, encrypKeyEditText;
     RelativeLayout firstLayout, thirdLayout;
-    Button bgChange;
-    ImageButton sendButton;
+    Button connectBtn, getIPBtn;
+    ImageButton sendButton, voiceMsgOn, attachmentBtn;
+    TextView clickHereBtn;
 
-    MenuItem changeBG, saveChat, disconnect, removeAllChat;
+    MenuItem changeBG, saveChat, disconnect, removeAllChat,voiceMode;
 
     ServerClass serverClass;
     ClientClass clientClass;
@@ -74,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
 
     ScrollView conversations;
     LinearLayout conversationLayout;
+
+    boolean need = true, voice = false;
 
     private Toolbar mToolbar; // for adding the toolbar
 
@@ -109,9 +112,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.demo_layout);
+        setContentView(R.layout.activity_main);
 
         initialization();
+
+        if(voice){
+            messageEditText.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    takeVoiceForHim();
+                    return false;
+                }
+            });
+        }
         //writeToFile("Hello :(", false);
     }
 
@@ -133,6 +146,11 @@ public class MainActivity extends AppCompatActivity {
         firstLayout = findViewById(R.id.firstLayout);
         thirdLayout = findViewById(R.id.third_layout);
         sendButton = findViewById(R.id.send_message_btn);
+        connectBtn = findViewById(R.id.connectButton);
+        getIPBtn = findViewById(R.id.getIPButton);
+        clickHereBtn = findViewById(R.id.click_here);
+        voiceMsgOn = findViewById(R.id.voice_btn);
+        attachmentBtn = findViewById(R.id.send_files_and_voice_btn);
 
         conversations = findViewById(R.id.conversations);
         conversationLayout = findViewById(R.id.scroll_view_linear_layout);
@@ -154,8 +172,62 @@ public class MainActivity extends AppCompatActivity {
         if(item.getItemId() == R.id.main_remove_chat_option)
             openRemoveAllChatAlertDialogBox();
 
+        if(item.getItemId() == R.id.main_voice_mode)
+            voiceModeOperation();
         return true;
     }
+
+    private void voiceModeOperation() {
+        if(voiceMode.getTitle().equals("Voice Mode : Off")) {
+            voiceMode.setTitle("Voice Mode : On");
+            openVoiceModeDialogBox();
+            voice = true;
+            attachmentBtn.setVisibility(View.INVISIBLE);
+            voiceMsgOn.setVisibility(View.VISIBLE);
+            saveChat.setEnabled(false);
+            disconnect.setEnabled(false);
+            changeBG.setEnabled(false);
+            removeAllChat.setEnabled(false);
+            Toast.makeText(MainActivity.this, "Voice Mode Enabled", Toast.LENGTH_SHORT).show();
+
+
+        }
+        else {
+            voiceMode.setTitle("Voice Mode : Off");
+            voice = false;
+            attachmentBtn.setVisibility(View.VISIBLE);
+            voiceMsgOn.setVisibility(View.INVISIBLE);
+            saveChat.setEnabled(true);
+            disconnect.setEnabled(true);
+            changeBG.setEnabled(true);
+            removeAllChat.setEnabled(true);
+            Toast.makeText(MainActivity.this, "Voice Mode Disabled", Toast.LENGTH_SHORT).show();
+
+
+        }
+
+    }
+
+    private void openVoiceModeDialogBox() {
+        final AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+        View mView = getLayoutInflater().inflate(R.layout.custom_voice_mode_dialog, null);
+
+        Button btn_yes = (Button) mView.findViewById(R.id.btn_yes);
+
+        alert.setView(mView);
+
+        final AlertDialog alertDialog = alert.create();
+        alertDialog.setCanceledOnTouchOutside(true);
+        alertDialog.setTitle("Voice Command Mode");
+
+        btn_yes.setOnClickListener((v) -> {
+            alertDialog.dismiss();
+        });
+
+
+        alertDialog.show();
+    }
+
 
     private void openRemoveAllChatAlertDialogBox() {
         final AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
@@ -358,11 +430,13 @@ public class MainActivity extends AppCompatActivity {
         saveChat = menu.findItem(R.id.main_save_chat_option);
         disconnect = menu.findItem(R.id.main_disconnect_option);
         removeAllChat = menu.findItem(R.id.main_remove_chat_option);
+        voiceMode = menu.findItem(R.id.main_voice_mode);
 
         changeBG.setEnabled(false);
         saveChat.setEnabled(false);
         disconnect.setEnabled(false);
         removeAllChat.setEnabled(false);
+        voiceMode.setEnabled(false);
 
         return true;
     }
@@ -401,6 +475,47 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    /*private void saveChatForHim() {
+        String allMessage = "";
+        int count = conversationLayout.getChildCount();
+        TextView children;
+        for (int i = 0; i < count; i++) {
+            if(conversationLayout.getChildAt(i) instanceof ImageView)
+                continue;
+            else{
+                children = (TextView) conversationLayout.getChildAt(i);
+                if(children.getText().toString().contains("am") || children.getText().toString().contains("pm")){
+
+                    if (children.getCurrentTextColor() == Color.parseColor("#FCE4EC")) {
+                        //allMessage += " " + children.getText().toString() + "\n\n";
+                    } else {
+                        //allMessage += " " + children.getText().toString() + "\n\n";
+                    }
+
+                }
+                else{
+                    if(children.getText().toString().equals("Background has been changed")
+                            || children.getText().toString().equals("You have removed all the previous message")
+                            || children.getText().toString().equals("Your pair has removed all the previous message")
+                            ){
+
+                    }
+                    else{
+                        if (children.getCurrentTextColor() == Color.parseColor("#FCE4EC")) {
+                            allMessage += "ME: " + children.getText().toString() + "\n\n";
+                        } else {
+                            allMessage += "CLIENT: " + children.getText().toString()+ "\n\n";
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+        writeToFile(allMessage, true, "Chat History");
+    }*/
+
     private void saveChatForHim() {
         String allMessage = "";
         int count = conversationLayout.getChildCount();
@@ -410,11 +525,29 @@ public class MainActivity extends AppCompatActivity {
                 continue;
             else{
                 children = (TextView) conversationLayout.getChildAt(i);
-                if(children.getText().toString() != "Background has been changed"){
+                if(children.getText().toString().contains(".txt has been received and downloaded on android/data/com.example.p2p/")){
+                    allMessage += "CLIENT: " + children.getText().toString() + "\n\n";
+                }
+                else if(children.getText().toString().contains(".txt has been sent")){
+                    allMessage += "ME: " + children.getText().toString() + "\n\n";
+                }
+                else if(children.getText().toString().contains("am") || children.getText().toString().contains("pm")){
+
                     if (children.getCurrentTextColor() == Color.parseColor("#FCE4EC")) {
-                        allMessage += "ME: " + children.getText().toString() + "\n\n";
+                        allMessage += " " + children.getText().toString() + "\n\n";
                     } else {
-                        allMessage += "CLIENT: " + children.getText().toString() + "\n\n";
+                        allMessage += " " + children.getText().toString() + "\n\n";
+                    }
+
+                }
+                else if(children.getText().toString().equals("") || children.getText().toString().equals(null)){
+
+                }
+                else if(!children.getText().toString().equals("Background has been changed") ){
+                    if (children.getCurrentTextColor() == Color.parseColor("#FCE4EC")) {
+                        allMessage += "ME: " + children.getText().toString() + "\n";
+                    } else {
+                        allMessage += "CLIENT: " + children.getText().toString() +"\n";
                     }
                 }
 
@@ -428,7 +561,7 @@ public class MainActivity extends AppCompatActivity {
         String time = "";
         if(timeStamp){
             //Time getting
-            time = getTime();
+            time = getTime(true);
         }
 
 
@@ -458,7 +591,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private String getTime() {
+    private String getTime(boolean need) {
         int minute, hour, second;
         String zone = "am";
         String time = "";
@@ -474,7 +607,10 @@ public class MainActivity extends AppCompatActivity {
         }
         second = calendar.get(Calendar.SECOND);
 
-        time = hour + ":" + minute + ":" + second + " " + zone;
+        if(need)
+            time = hour + ":" + minute + ":" + second + " " + zone;
+        else
+            time = hour + ":" + minute + " " + zone;
 
         return time;
     }
@@ -495,14 +631,13 @@ public class MainActivity extends AppCompatActivity {
         alert.setView(mView);
 
         final AlertDialog alertDialog = alert.create();
-        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.setCanceledOnTouchOutside(true);
         alertDialog.setTitle("File and Voice Sharing");
 
         btn_file.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent().setType("text/plain").setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select a TXT file"), 123);
+                openStorage();
                 alertDialog.dismiss();
             }
         });
@@ -516,6 +651,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         alertDialog.show();
+    }
+
+    private void openStorage() {
+        Intent intent = new Intent().setType("text/plain").setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select a TXT file"), 123);
+
     }
 
     private void takeVoiceForHim() {
@@ -539,8 +680,7 @@ public class MainActivity extends AppCompatActivity {
             File file = new File(path);
             if(file.exists())
                 Log.d(TAG, "Selected file exists");
-            else
-                Toast.makeText(this, "Selected file doesn't exists", Toast.LENGTH_SHORT).show();
+
 
             String fileText = readTextFile(uri);
             Log.d(TAG, "text inside file: "+fileText);
@@ -553,7 +693,107 @@ public class MainActivity extends AppCompatActivity {
             case 10:
                 if (resultCode == RESULT_OK && intent != null) {
                     ArrayList<String> result = intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    messageEditText.setText(result.get(0));
+                    String voiceCommand = result.get(0);
+
+                    int x = voiceCommand.compareToIgnoreCase("Remove All Chat");
+                    int y = voiceCommand.compareToIgnoreCase("Save Chat");
+                    int z = voiceCommand.compareToIgnoreCase("Disconnect");
+                    int m = voiceCommand.compareToIgnoreCase("voice mode off");
+                    int n = voiceCommand.compareToIgnoreCase("share a file");
+                    boolean p = voiceCommand.contains("change background as ");
+
+
+                    if(x == 0){
+                        openRemoveAllChatAlertDialogBox();
+                    }
+                    else if(y == 0){
+                        openSaveChatDialogBoxForHim();
+                    }
+                    else if(z == 0){
+                        openDisconnectAlertDialogBox();
+                    }
+                    else if(m == 0){
+                        voiceModeOperation();
+                    }
+                    else if(n == 0){
+                        openStorage();
+                    }
+                    else if(p){
+                        boolean layout1 = voiceCommand.contains("layout 1");
+                        boolean layout2 = voiceCommand.contains("layout 2");
+                        boolean layout3 = voiceCommand.contains("layout 3");
+                        boolean layout4 = voiceCommand.contains("layout 4");
+                        boolean layout5 = voiceCommand.contains("layout 5");
+                        boolean layout6 = voiceCommand.contains("layout 6");
+                        boolean layout7 = voiceCommand.contains("layout 7");
+                        boolean layout8 = voiceCommand.contains("layout 8");
+                        boolean layout9 = voiceCommand.contains("layout 9");
+
+                        if(layout1){
+                            String msg =  "bg@%@bg1";
+                            sendReceive.write(caesarCipherEncryption(msg, shift));
+                            Toast.makeText(MainActivity.this, "background is selected as LAYOUT 1", Toast.LENGTH_SHORT).show();
+                        }
+
+                        else if(layout2){
+                            String msg =  "bg@%@bg2";
+                            sendReceive.write(caesarCipherEncryption(msg, shift));
+                            Toast.makeText(MainActivity.this, "background is selected as LAYOUT 2", Toast.LENGTH_SHORT).show();
+                        }
+
+                        else if(layout3){
+                            String msg =  "bg@%@bg3";
+                            sendReceive.write(caesarCipherEncryption(msg, shift));
+                            Toast.makeText(MainActivity.this, "background is selected as LAYOUT 3", Toast.LENGTH_SHORT).show();
+                        }
+
+                        else if(layout4){
+                            String msg = "bg@%@bg4";
+                            sendReceive.write(caesarCipherEncryption(msg, shift));
+                            Toast.makeText(MainActivity.this, "background is selected as LAYOUT 4", Toast.LENGTH_SHORT).show();
+                        }
+
+                        else if(layout5){
+                            String msg =  "bg@%@bg5";
+                            sendReceive.write(caesarCipherEncryption(msg, shift));
+                            Toast.makeText(MainActivity.this, "background is selected as LAYOUT 5", Toast.LENGTH_SHORT).show();
+                        }
+
+                        else if(layout6){
+                            String msg =  "bg@%@bg6";
+                            sendReceive.write(caesarCipherEncryption(msg, shift));
+                            Toast.makeText(MainActivity.this, "background is selected as LAYOUT 6", Toast.LENGTH_SHORT).show();
+                        }
+
+                        else if(layout7){
+                            String msg =  "bg@%@bg7";
+                            sendReceive.write(caesarCipherEncryption(msg, shift));
+                            Toast.makeText(MainActivity.this, "background is selected as LAYOUT 7", Toast.LENGTH_SHORT).show();
+                        }
+
+                        else if(layout8){
+                            String msg =  "bg@%@bg8";
+                            sendReceive.write(caesarCipherEncryption(msg, shift));
+                            Toast.makeText(MainActivity.this, "background is selected as LAYOUT 8", Toast.LENGTH_SHORT).show();
+                        }
+
+                        else if(layout9){
+                            String msg =  "bg@%@bg9";
+                            sendReceive.write(caesarCipherEncryption(msg, shift));
+                            Toast.makeText(MainActivity.this, "background is selected as LAYOUT 9", Toast.LENGTH_SHORT).show();
+                        }
+
+
+                    }
+
+                    else{
+                        messageEditText.setText(voiceCommand);
+                        Toast.makeText(this, "Didn't get the input, please try again", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                    //if(result.get(0).equals("save chat"))
+
                 }
                 break;
         }
@@ -675,6 +915,13 @@ public class MainActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("Chit Chat");
             firstLayout.setVisibility(View.VISIBLE);
 
+            targetIPEditText.setVisibility(View.INVISIBLE);
+            targetPortEditText.setVisibility(View.INVISIBLE);
+            connectBtn.setVisibility(View.INVISIBLE);
+            clickHereBtn.setVisibility(View.INVISIBLE);
+            getIPBtn.setVisibility(View.INVISIBLE);
+            encrypKeyEditText.setVisibility(View.INVISIBLE);
+
             Toast.makeText(MainActivity.this, "chat is disconnected", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -698,6 +945,12 @@ public class MainActivity extends AppCompatActivity {
                 serverClass = new ServerClass(Integer.parseInt(port));
                 serverClass.start();
                 Toast.makeText(this, "Server has been started..", Toast.LENGTH_SHORT).show();
+                targetIPEditText.setVisibility(View.VISIBLE);
+                targetPortEditText.setVisibility(View.VISIBLE);
+                connectBtn.setVisibility(View.VISIBLE);
+                clickHereBtn.setVisibility(View.VISIBLE);
+                getIPBtn.setVisibility(View.VISIBLE);
+                encrypKeyEditText.setVisibility(View.VISIBLE);
 
             }catch (Exception e){
                 Toast.makeText(MainActivity.this, "Can't start server, please check the port number first", Toast.LENGTH_SHORT).show();
@@ -741,7 +994,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void onSendClicked(View v){
 
-        String msg = messageEditText.getText().toString();
+        String msg = messageEditText.getText().toString().trim();
+        String msgTime = "@%@" + getTime(false);
+        String msgWithTime = msg + msgTime;
 
         if(TextUtils.isEmpty(msg)){
             messageEditText.requestFocus();
@@ -750,7 +1005,7 @@ public class MainActivity extends AppCompatActivity {
         else
         {
             //sendReceive.write("message@%@"+msg);
-            sendReceive.write(caesarCipherEncryption(msg, shift));
+            sendReceive.write(caesarCipherEncryption(msgWithTime, shift));
         }
 
     }
@@ -781,6 +1036,10 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.setTitle("IP Address");
 
         alertDialog.show();
+    }
+
+    public void onSVoiceIconClicked(View view) {
+        takeVoiceForHim();
     }
 
     private class SendReceive extends Thread {
@@ -906,14 +1165,15 @@ public class MainActivity extends AppCompatActivity {
 
         runOnUiThread(() -> {
                     TextView textView = new TextView(this);
+                    TextView msgTime = new TextView(this);
 
                     if (color == Color.parseColor("#FCE4EC")
                             && !(caesarCipherDecryption(message, shift).contains("bg@%@bg"))
                             && !(caesarCipherDecryption(message, shift).contains("diconnect@%@d"))
                             && !(caesarCipherDecryption(message, shift).contains("file@%@"))
                             && !(caesarCipherDecryption(message, shift).contains("remove@%@"))) {
-                        textView.setPadding(200, 10, 10, 20);
-                        textView.setMaxLines(5);
+                        textView.setPadding(200, 20, 10, 10);
+                        //textView.setMaxLines(5);
                         textView.setGravity(Gravity.RIGHT);
                         textView.setBackgroundResource(R.drawable.sender_messages_layout);
                         textView.setTextIsSelectable(true);
@@ -926,13 +1186,28 @@ public class MainActivity extends AppCompatActivity {
                         //lp1.rightMargin = 50;
                         textView.setLayoutParams(lp1);
 
+                        msgTime.setPadding(0,0,0,0);
+
+                        msgTime.setTextSize(14);
+                        msgTime.setTextColor(Color.parseColor("#FCE4EC"));
+                        msgTime.setTypeface(textView.getTypeface(), Typeface.ITALIC );
+                        conversationLayout.setGravity(View.TEXT_ALIGNMENT_CENTER);
+                        msgTime.setGravity(Gravity.LEFT);
+
+                        LinearLayout.LayoutParams lp4 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        // lp1.setMargins(10, 10, 10, 10);
+                        // lp1.setMargins(10, 10, 10, 10);
+                        //lp1.width = 400;
+                        lp4.leftMargin = 200;
+                        msgTime.setLayoutParams(lp4);
+
                         //textView.setBackgroundResource(R.drawable.sender_messages_layout);
                     } else if(!(caesarCipherDecryption(message, shift).contains("bg@%@bg"))
                             && !(caesarCipherDecryption(message, shift).contains("diconnect@%@d"))
                             && !(caesarCipherDecryption(message, shift).contains("file@%@"))
                             && !(caesarCipherDecryption(message, shift).contains("remove@%@"))) {
-                        textView.setPadding(10, 10, 200, 20);
-                        textView.setMaxLines(5);
+                        textView.setPadding(10, 20, 200, 10);
+                        //textView.setMaxLines(5);
                         textView.setGravity(Gravity.LEFT);
                         textView.setBackgroundResource(R.drawable.receiver_messages_layout);
                         textView.setTextIsSelectable(true);
@@ -943,6 +1218,18 @@ public class MainActivity extends AppCompatActivity {
                         //lp1.leftMargin = 150;
                         lp2.rightMargin = 200;
                         textView.setLayoutParams(lp2);
+
+                        msgTime.setTextSize(14);
+                        msgTime.setTextColor(Color.parseColor("#FFFFFF"));
+                        msgTime.setTypeface(textView.getTypeface(), Typeface.ITALIC);
+                        conversationLayout.setGravity(View.TEXT_ALIGNMENT_CENTER);
+                        LinearLayout.LayoutParams lp3 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        //lp1.setMargins(10, 10, 10, 10);
+                        //lp1.width = 400;
+                        //lp1.leftMargin = 150;
+                        lp3.rightMargin = 200;
+                        msgTime.setGravity(Gravity.RIGHT);
+                        msgTime.setLayoutParams(lp3);
 
 
                     }
@@ -983,9 +1270,9 @@ public class MainActivity extends AppCompatActivity {
                         removeAllChatForHim();
 
                         if(color == Color.parseColor("#FCE4EC"))
-                            textView.setText("You have been removed all the previous message");
+                            textView.setText("You have removed all the previous message");
                         else{
-                            textView.setText("Your pair has been removed all the previous message");
+                            textView.setText("Your pair has removed all the previous message");
                         }
 
                     }
@@ -1012,9 +1299,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                     //String actualMessage = editMessage(message);
                     else{
+                        Log.d(TAG, "messages[0]: " +messages[0]);
+                        Log.d(TAG, "messages[0]: " +messages[1]);
 
                         textView.setTextSize(20);
-                        textView.setText(actualMessage);
+                        textView.setText(messages[0]);
+
+                        msgTime.setText("(" + getTime(false) + ")");
                     }
 
 
@@ -1023,6 +1314,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                     conversationLayout.addView(textView);
+                    conversationLayout.addView(msgTime);
                     conversations.post(() -> conversations.fullScroll(View.FOCUS_DOWN));
                 }
         );
@@ -1032,7 +1324,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView divider = new ImageView(this);
         conversationLayout.addView(divider);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(9, 9, 9, 9);
+        lp.setMargins(4, 4, 4, 4);
         divider.setLayoutParams(lp);
         divider.setBackgroundColor(Color.TRANSPARENT);
     }
@@ -1050,6 +1342,7 @@ public class MainActivity extends AppCompatActivity {
             changeBG.setEnabled(true);
             disconnect.setEnabled(true);
             removeAllChat.setEnabled(true);
+            voiceMode.setEnabled(true);
         });
     }
 

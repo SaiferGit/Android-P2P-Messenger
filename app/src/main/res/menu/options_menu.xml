@@ -38,4 +38,14 @@
 
     </item>
 
+    <item
+        android:title="Voice Mode : Off"
+        android:id="@+id/main_voice_mode"
+        app:showAsAction="never"
+        >
+        <!-- user click korlei jate ashe -->
+
+    </item>
+
+
 </menu>

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ChitChat</string>
+    <string name="first">1. To save chat use <b>save chat</b> command. \n2. To remove all the chat use <b>Remove all chat</b> command. \n3. To disconnect use <b>Disconnect</b> command. \n4. To change the background use <b>Change background as<i>(your choice)</i></b> command. \n5. To disable the voice enable mode you can use either <b>Voice mode off</b> command or can <b>manually disable it</b>. \n6. To share a file use <b>Share a file</b> command.</string>
+
 </resources>

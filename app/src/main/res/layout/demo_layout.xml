@@ -63,6 +63,7 @@
             android:id="@+id/targetIPEditText"
             android:layout_width="255dp"
             android:layout_height="wrap_content"
+            android:visibility="invisible"
             android:hint="Target IP"
             android:inputType="text"
             android:background="@drawable/edit_text_bg"
@@ -79,6 +80,7 @@
             android:layout_width="255dp"
             android:layout_height="wrap_content"
             android:hint="Target Port"
+            android:visibility="invisible"
             android:inputType="number"
             android:background="@drawable/edit_text_bg"
             android:padding="10dp"
@@ -94,6 +96,7 @@
             android:layout_width="255dp"
             android:layout_height="wrap_content"
             android:hint="Encryption key"
+            android:visibility="invisible"
             android:inputType="number"
             android:background="@drawable/edit_text_bg"
             android:padding="10dp"
@@ -109,6 +112,7 @@
             android:layout_width="130dp"
             android:layout_height="45dp"
             android:onClick="onConnectClicked"
+            android:visibility="invisible"
             android:layout_below="@+id/encrypEditText"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="11dp"
@@ -125,6 +129,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/connectButton"
+            android:visibility="invisible"
             android:layout_marginTop="30dp"
             android:gravity="center"
             android:textColor="@color/shada"
@@ -141,6 +146,7 @@
             android:layout_below="@+id/click_here"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="22dp"
+            android:visibility="invisible"
             android:background="@drawable/rounded_corners"
             android:padding="5dp"
             android:text="Get IP"
@@ -207,19 +213,36 @@
 
             <ImageButton
                 android:id="@+id/send_files_and_voice_btn"
-                android:onClick="onSendFilesAndVoiceClicked"
-                android:layout_width="60dp"
+                android:visibility="visible"
+                android:layout_width="55dp"
                 android:layout_height="50dp"
-                android:src="@drawable/attachment"
                 android:layout_alignParentStart="true"
+                android:layout_marginStart="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginEnd="2dp"
                 android:backgroundTint="@color/shada"
-                />
+                android:onClick="onSendFilesAndVoiceClicked"
+                android:src="@drawable/attachment"
+                android:background="@drawable/file_send_shape"/>
 
+            <ImageButton
+                android:id="@+id/voice_btn"
+                android:visibility="invisible"
+                android:layout_width="55dp"
+                android:layout_height="50dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginEnd="2dp"
+                android:backgroundTint="@color/shada"
+                android:onClick="onSVoiceIconClicked"
+                android:src="@drawable/voice_on"
+                android:background="@drawable/file_send_shape"/>
 
             <EditText
                 android:id="@+id/messageEditText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginStart="3dp"
                 android:layout_marginEnd="-1dp"
                 android:layout_toStartOf="@+id/send_message_btn"
@@ -231,12 +254,16 @@
 
             <ImageButton
                 android:id="@+id/send_message_btn"
-                android:layout_width="60dp"
+                android:layout_width="55dp"
+                android:layout_height="50dp"
                 android:onClick="onSendClicked"
-                android:layout_height="wrap_content"
                 android:src="@drawable/send_message"
                 android:layout_alignParentEnd="true"
+                android:layout_marginStart="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginEnd="2dp"
                 android:backgroundTint="@color/shada"
+                android:background="@drawable/file_send_shape2"
                 />
 
         </RelativeLayout>

@@ -13,7 +13,7 @@
         <Button
             android:id="@+id/btn_bg1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:background="@drawable/rounded_red"
             android:text="Layout 1"
             android:textAllCaps="false"
@@ -27,7 +27,7 @@
         <Button
             android:id="@+id/btn_bg2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:background="@drawable/rounded_purple"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
@@ -41,7 +41,7 @@
         <Button
             android:id="@+id/btn_bg3"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:background="@drawable/rounded_pink"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
@@ -61,7 +61,7 @@
         <Button
             android:id="@+id/btn_bg4"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:background="@drawable/rounded_paste"
             android:text="Layout 4"
             android:textAllCaps="false"
@@ -75,7 +75,7 @@
         <Button
             android:id="@+id/btn_bg5"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:background="@drawable/rounded_green"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
@@ -89,7 +89,7 @@
         <Button
             android:id="@+id/btn_bg6"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:background="@drawable/rounded_magenta"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
@@ -109,7 +109,7 @@
         <Button
             android:id="@+id/btn_bg7"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:background="@drawable/rounded_blacki"
             android:text="Layout 7"
             android:textAllCaps="false"
@@ -123,7 +123,7 @@
         <Button
             android:id="@+id/btn_bg8"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:background="@drawable/rounded_yellow"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
@@ -137,7 +137,7 @@
         <Button
             android:id="@+id/btn_bg9"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:background="@drawable/rounded_tomato"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
