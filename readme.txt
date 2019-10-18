@@ -30,26 +30,30 @@
 		|    A beautiful UI for exchanged data   |   Caesar Cipher encryption & decryption  |
 		|                                        |         of data for security             |
 		|----------------------------------------|------------------------------------------|
-		|          Sharing textual files         | Delete chat history for individual and   |
-		|					 | both the peers			    |
+		|          Sharing textual files         | Exchanging messages time added, time	    | 
+		|					 | added to chat history		    |
 		|----------------------------------------|------------------------------------------|
-		|     Save the exchanged messages        | In total 10 types of UI for conversations|
-		|     whenever anyone wants		 |					    |
+		|     Save the exchanged messages        | Voice Mode for sending messages, giving  |
+		|     whenever anyone wants		 |all the commands such as changing         |
+		|					 |background and sharing file also	    |
 		|----------------------------------------|------------------------------------------|
-		|  Changing background option which is   |    Confirmation using alert dialogue in  |
-		|        visible to both peers.          | each step and Time of saving chat history|
+		|  Changing background option which is   |    Delete chat history for individual and|
+		|        visible to both peers.          | both the peers                           |
 		|----------------------------------------|------------------------------------------|
 		|					 |      Added chat disconnect option        |
 		|----------------------------------------|------------------------------------------|
-		|                                        |   Own App Icon with own  designed app    |
-        	|                                        | logo			    		    |
+		|                                        |    Confirmation using alert dialogue in  |
+        	|                                        | each step and Time of saving chat history|	    	 
 		|----------------------------------------|------------------------------------------|
-		|					 |           Splash screen		    |
+		|					 |   Own App Icon with own  designed app    |
+		|					 |logo, Splash Screen			    |
 		|----------------------------------------|------------------------------------------|
-        	|                                        |      get own network IP	            |
+        	|                                        | In total 10 types of UI for conversations|   	        
 		|----------------------------------------|------------------------------------------|
 		|					 |  text selectable, can be copied, pasted, |
 		|					 |  shared  				    |
+		|----------------------------------------|------------------------------------------|
+		|					 |  get own network IP			    |
 		|________________________________________|__________________________________________|
 	
 
@@ -71,8 +75,9 @@
 		        |    i.|    Receive port is your listen port by which you can get data.     |
         		|------|--------------------------------------------------------------------|
         		|   ii.|    Start Server button is the button by which you can start your   |
-	        	|      |listening port that is written in the Rec port.                     |
-	        	|------|--------------------------------------------------------------------|
+	        	|      |listening port that is written in the Rec port. Once you start the  |
+			|      |server you will see the following fields:			    |
+	        	|------|---|							       |----|
 	        	|  iii.|    Target IP is what your other phone’s IP is/your friends phone IP|
 	        	|------|--------------------------------------------------------------------|
 	        	|   iv.|    Target Port is what your other phone’s receiving port. By which | 
@@ -106,7 +111,7 @@
 			|      |and share the selected text.  					    |
 		|-------|------|--------------------------------------------------------------------| 
 		|   5.  |   In top right corner you can see a menu bar. Tap the menu bar and it will|
-		|       | pop up 4 options.                                                         |
+		|       | pop up 5 options.                                                         |
 		|-------|------|                                                             |------|
 			|    i.|    By clicking Save Chat, you can save your exchanged messages.    |
         		|      |The chat will be saved on: 					    |
@@ -120,6 +125,10 @@
                         |------|--------------------------------------------------------------------|
   			|  iv. |    By clicking Remove All Chat, you can remove all the conversation|
  			|      |for yourself and as well as for the other peer.			    |
+		 	|------|--------------------------------------------------------------------|
+  			|  v.  |    By clicking Voice Mode: OFF, you can enable Voice Mode: ON and  |
+ 			|      |can commands for all the functionalities using specific voice       |
+			|      |command.							    |
 		|-------|------|--------------------------------------------------------------------|
 		|_______|______|____________________________________________________________________|
 
@@ -176,6 +185,10 @@
 		|		  |chat from own window, just remove all the views programatically  |
 		|		  |and the other by  removing all the chat for both window.	    |
 		|-----------------|-----------------------------------------------------------------|
+		|Voice Mode:      |	Specific commands are given as voice input when the mode is |
+		|	ON/OFF	  |enabled. A new voice icon is added when the mode is enabled, you |
+		|		  |can exchange messages also through this command		    |
+		|-----------------|-----------------------------------------------------------------|
 		| Text Selection  |	We can select any text messages by on long press, can copy  |
 		|		  |and paste to clipboard and share it to other application by 	    |
 		|		  |implementing textAllSelectable.				    |
@@ -200,14 +213,21 @@
 		|Tajkia did:| BG change, saving conversations, splash screen, app icon design, 	    |
 		|           | app logo design, designing beautiful UI and magical GUI, background   |
 		|	    | picture selection, chat disconnect option, text selectable, can be    | 
-		|	    | copied, pasted, shared,removing chat history, app running, testing.   |
+		|	    | copied, pasted, shared,removing chat history, voice enable mood,      |
+		|	    | chat history time, app running, testing.				    |
 		|-----------|-----------------------------------------------------------------------|
 		|Saif did:  | Socket desiging, file sending, exchanging messages, Caesar Cipher     |
 		|           | encryption system, exchanged messages using voice, designing beautiful| 
 		|	    | UI and magical GUI, alert dialogue confirmation and timing,removing   |
-    	        |           | chat history, app testing, debugging.				    |
+    	        |           | chat history, voice enable mood, exchanged message time, 		    |
+		|	    | app testing, debugging.						    |
             	|___________|_______________________________________________________________________|
 
+		>> Later added in saterday final submission:
+		  	1. Menu Item: voice mode 
+		  	2. sending and receiving end message exchanging time added.
+		  	3. chat histry with exchanged messages time.
+		  	4. Layout updated.
   
 
    		

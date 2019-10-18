@@ -116,22 +116,12 @@ public class MainActivity extends AppCompatActivity {
 
         initialization();
 
-        if(voice){
-            messageEditText.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    takeVoiceForHim();
-                    return false;
-                }
-            });
-        }
-        //writeToFile("Hello :(", false);
     }
 
     private void initialization() {
 
         // referencing variables with layout
-        mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
+        mToolbar = findViewById(R.id.main_page_toolbar);
 
         // adding the toolbar
         setSupportActionBar(mToolbar);
@@ -156,10 +146,34 @@ public class MainActivity extends AppCompatActivity {
         conversationLayout = findViewById(R.id.scroll_view_linear_layout);
     }
 
+    // by this method we can access the options inside the menu folder
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.options_menu, menu); // linking up with menu option resource file
+
+        changeBG = menu.findItem(R.id.main_change_bg_option);
+        saveChat = menu.findItem(R.id.main_save_chat_option);
+        disconnect = menu.findItem(R.id.main_disconnect_option);
+        removeAllChat = menu.findItem(R.id.main_remove_chat_option);
+        voiceMode = menu.findItem(R.id.main_voice_mode);
+
+        changeBG.setEnabled(false);
+        saveChat.setEnabled(false);
+        disconnect.setEnabled(false);
+        removeAllChat.setEnabled(false);
+        voiceMode.setEnabled(false);
+
+        return true;
+    }
+
+    // when menu items will be selected
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
 
+        // opening a dialog box for confirmation everytime, so for cleaning code, we wrote it in a method
         if(item.getItemId() == R.id.main_change_bg_option)
             openChangeBGDialogBox();
 
@@ -177,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    // on voice mode button selected
     private void voiceModeOperation() {
         if(voiceMode.getTitle().equals("Voice Mode : Off")) {
             voiceMode.setTitle("Voice Mode : On");
@@ -208,6 +223,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // voice mode dialog box selection
     private void openVoiceModeDialogBox() {
         final AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.custom_voice_mode_dialog, null);
@@ -228,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-
+    // when removing  all chat selected
     private void openRemoveAllChatAlertDialogBox() {
         final AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.custom_remove_all_chat_dialog, null);
@@ -247,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
         cbRemoveForAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) buttonView.setTextColor(getResources().getColor(R.color.green));
+                if(isChecked) buttonView.setTextColor(getResources().getColor(R.color.green)); // changing color of checkbox
                 else buttonView.setTextColor(getResources().getColor(R.color.black));
             }
         });
@@ -265,14 +281,13 @@ public class MainActivity extends AppCompatActivity {
         btn_clear_messages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // if user selects checkbox also, we will remove all the chat for everyone. so sending a code to the other end
                 if(cbRemoveForAll.isChecked()){
-                    // do something
                     sendReceive.write(caesarCipherEncryption("remove@%@", shift));
                 }
+                // remove self chat
                 removeAllChatForHim();
-                //sendReceive.write(caesarCipherEncryption("diconnect@%@d", shift));
-                Log.d(TAG, "Remove all chat Msg: " +caesarCipherEncryption("diconnect@%@d", shift));
-                //disconnectHim();
+                Log.d(TAG, "Remove all chat Msg: " +caesarCipherEncryption("diconnect@%@d", shift)); // notify user
                 alertDialog.dismiss();
             }
         });
@@ -280,13 +295,15 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    // removing chat main method
     private void removeAllChatForHim() {
-        String allMessage = "";
+        // removing all the linear layout
         conversationLayout.removeAllViews();
         Toast.makeText(this, "All chat have been removed!", Toast.LENGTH_SHORT).show();
 
     }
 
+    // opening bg change dialog box for showing 9 more layouts
     private void openChangeBGDialogBox() {
         final AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.custom_background_change_dialog, null);
@@ -307,6 +324,7 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.setCanceledOnTouchOutside(true);
         alertDialog.setTitle("Changing Background");
 
+        // when each of a layout is selected, a coded message is sending other end so that we can change it for other end also
         layout1.setOnClickListener((v) -> {
             String msg =  "bg@%@bg1";
             sendReceive.write(caesarCipherEncryption(msg, shift));
@@ -373,6 +391,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // when changebgforhim method is called, it takes a string, that is sent through the socket, and  changing background when getting the string
+    // it also changes the toolbar color so that the UI/Theme looks awesome :)
     private void changeBGforHim(String msg) {
 
         if(msg.equals("bg@%@bg1")){
@@ -418,29 +438,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    // by this method we can access the options inside the menu folder
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.options_menu, menu); // linking up with menu option resource file
-
-        changeBG = menu.findItem(R.id.main_change_bg_option);
-        saveChat = menu.findItem(R.id.main_save_chat_option);
-        disconnect = menu.findItem(R.id.main_disconnect_option);
-        removeAllChat = menu.findItem(R.id.main_remove_chat_option);
-        voiceMode = menu.findItem(R.id.main_voice_mode);
-
-        changeBG.setEnabled(false);
-        saveChat.setEnabled(false);
-        disconnect.setEnabled(false);
-        removeAllChat.setEnabled(false);
-        voiceMode.setEnabled(false);
-
-        return true;
-    }
-
+    // on save chat selection it will appear
     private void openSaveChatDialogBoxForHim() {
         final AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.custom_disconnect_dialog, null);
@@ -467,6 +465,7 @@ public class MainActivity extends AppCompatActivity {
         btn_yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // saving chat on confirmation
                 saveChatForHim();
                 alertDialog.dismiss();
             }
@@ -475,62 +474,29 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    /*private void saveChatForHim() {
-        String allMessage = "";
-        int count = conversationLayout.getChildCount();
-        TextView children;
-        for (int i = 0; i < count; i++) {
-            if(conversationLayout.getChildAt(i) instanceof ImageView)
-                continue;
-            else{
-                children = (TextView) conversationLayout.getChildAt(i);
-                if(children.getText().toString().contains("am") || children.getText().toString().contains("pm")){
 
-                    if (children.getCurrentTextColor() == Color.parseColor("#FCE4EC")) {
-                        //allMessage += " " + children.getText().toString() + "\n\n";
-                    } else {
-                        //allMessage += " " + children.getText().toString() + "\n\n";
-                    }
-
-                }
-                else{
-                    if(children.getText().toString().equals("Background has been changed")
-                            || children.getText().toString().equals("You have removed all the previous message")
-                            || children.getText().toString().equals("Your pair has removed all the previous message")
-                            ){
-
-                    }
-                    else{
-                        if (children.getCurrentTextColor() == Color.parseColor("#FCE4EC")) {
-                            allMessage += "ME: " + children.getText().toString() + "\n\n";
-                        } else {
-                            allMessage += "CLIENT: " + children.getText().toString()+ "\n\n";
-                        }
-                    }
-
-                }
-
-            }
-
-        }
-        writeToFile(allMessage, true, "Chat History");
-    }*/
-
+    // main method for saving chat
     private void saveChatForHim() {
-        String allMessage = "";
-        int count = conversationLayout.getChildCount();
-        TextView children;
+        String allMessage = ""; // took a empty string
+        int count = conversationLayout.getChildCount(); // getting all the linear layout no
+        TextView children; // instance of a textview
         for (int i = 0; i < count; i++) {
+            // for every message, we add 3 linear layout, 2 textview one for showing messages, another for showing time
+            // and 1 image view as a divider between 2 messages.
+
+            // if  the chlid of a linear layout is a instance of imageview, then there is no text, as it is a divider.
             if(conversationLayout.getChildAt(i) instanceof ImageView)
                 continue;
             else{
-                children = (TextView) conversationLayout.getChildAt(i);
+                children = (TextView) conversationLayout.getChildAt(i); // getting the textview
+                // adding messages
                 if(children.getText().toString().contains(".txt has been received and downloaded on android/data/com.example.p2p/")){
                     allMessage += "CLIENT: " + children.getText().toString() + "\n\n";
                 }
                 else if(children.getText().toString().contains(".txt has been sent")){
                     allMessage += "ME: " + children.getText().toString() + "\n\n";
                 }
+                // if textview is a time message then
                 else if(children.getText().toString().contains("am") || children.getText().toString().contains("pm")){
 
                     if (children.getCurrentTextColor() == Color.parseColor("#FCE4EC")) {
@@ -540,10 +506,13 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 }
+                // null messages won't be saved, we aren't sending time with file sending, so there generates a null text view.
                 else if(children.getText().toString().equals("") || children.getText().toString().equals(null)){
 
                 }
                 else if(!children.getText().toString().equals("Background has been changed") ){
+                    // if textview color is #FCE4EC then it is sender message, saving as ME
+                    // otherwise it is receiver message
                     if (children.getCurrentTextColor() == Color.parseColor("#FCE4EC")) {
                         allMessage += "ME: " + children.getText().toString() + "\n";
                     } else {
@@ -554,9 +523,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
+        // write the string and save it as chat history.txt, and add time stamp with it
         writeToFile(allMessage, true, "Chat History");
     }
 
+    // writing a text file
     private void writeToFile(String data, boolean timeStamp, String name) {
         String time = "";
         if(timeStamp){
@@ -565,22 +536,22 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        File path = this.getExternalFilesDir(null);
+        File path = this.getExternalFilesDir(null); // getting file path
         filePath = path.toString();
 
         File file;
 
         if(time.equals(""))
-            file = new File(path, name);
+            file = new File(path, name); // saving shared files
 
         else
-            file = new File(path, name + "(" + time + ")" + System.lineSeparator() + ".txt");
+            file = new File(path, name + "(" + time + ")" + System.lineSeparator() + ".txt"); // saving chat history.txt with timestamp
 
-        FileOutputStream stream;
+        FileOutputStream stream; // creating a file output stream for sending file
         try {
             stream = new FileOutputStream(file, false);
-            stream.write(data.getBytes());
-            stream.close();
+            stream.write(data.getBytes()); // writing
+            stream.close(); // closing the stream
             Toast.makeText(this, "File Succcessfully Saved!", Toast.LENGTH_SHORT).show();
             Log.d(TAG, data);
         } catch (FileNotFoundException e) {
@@ -590,7 +561,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    // getting time function
     private String getTime(boolean need) {
         int minute, hour, second;
         String zone = "am";
@@ -615,12 +586,13 @@ public class MainActivity extends AppCompatActivity {
         return time;
     }
 
+    // on attachment button click
     public void onSendFilesAndVoiceClicked(View view) {
-        openFileandVoiceShareAlertDialog();
-
+        openFileandVoiceShareAlertDialog(); // opening a dialog for choosing next step
 
     }
 
+    // opening dialog
     private void openFileandVoiceShareAlertDialog() {
         final AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.custom_file_voice_change_dialog, null);
@@ -634,6 +606,7 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.setCanceledOnTouchOutside(true);
         alertDialog.setTitle("File and Voice Sharing");
 
+        // on file button click storage will be opened
         btn_file.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -642,6 +615,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // on voice button click we started of taking input
         btn_voice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -654,11 +628,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openStorage() {
+        // creating new gallery intent for selecting text file only
         Intent intent = new Intent().setType("text/plain").setAction(Intent.ACTION_GET_CONTENT);
+        // called a override method for starting gallery intent
         startActivityForResult(Intent.createChooser(intent, "Select a TXT file"), 123);
 
     }
 
+    // taking voice input
     private void takeVoiceForHim() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -671,30 +648,36 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // on activity result
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
+        // if this is a gallery opening request
         if(requestCode==123 && resultCode==RESULT_OK) {
             Uri uri = intent.getData();
-            String path = getFilePathFromUri(uri);
+            String path = getFilePathFromUri(uri); // getting file path
             File file = new File(path);
             if(file.exists())
                 Log.d(TAG, "Selected file exists");
 
 
-            String fileText = readTextFile(uri);
+            String fileText = readTextFile(uri); // getting files inside information.
             Log.d(TAG, "text inside file: "+fileText);
 
+            // sending the file with a special code for recognize other end.
+            // file code + file name + code + inside file information
             String writeMsg = "file@%@"+file.getName()+"@%@"+fileText;
-            sendFilesALertDialog(writeMsg);
+            sendFilesALertDialog(writeMsg); // confirming before sending
         }
 
+        // if request is a voice input then
         switch (requestCode) {
             case 10:
                 if (resultCode == RESULT_OK && intent != null) {
                     ArrayList<String> result = intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    String voiceCommand = result.get(0);
+                    String voiceCommand = result.get(0); // getting the best result which is at position 0
 
+                    // comparing voice command for checking if it is a command or not
                     int x = voiceCommand.compareToIgnoreCase("Remove All Chat");
                     int y = voiceCommand.compareToIgnoreCase("Save Chat");
                     int z = voiceCommand.compareToIgnoreCase("Disconnect");
@@ -702,7 +685,7 @@ public class MainActivity extends AppCompatActivity {
                     int n = voiceCommand.compareToIgnoreCase("share a file");
                     boolean p = voiceCommand.contains("change background as ");
 
-
+                    // doing change by voice by redirecting it to the related function
                     if(x == 0){
                         openRemoveAllChatAlertDialogBox();
                     }
@@ -718,6 +701,7 @@ public class MainActivity extends AppCompatActivity {
                     else if(n == 0){
                         openStorage();
                     }
+                    // changing background
                     else if(p){
                         boolean layout1 = voiceCommand.contains("layout 1");
                         boolean layout2 = voiceCommand.contains("layout 2");
@@ -799,6 +783,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // after selecting file, a dialog will be opened for confirmation
     private void sendFilesALertDialog(String writeMsg) {
         final AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.custom_disconnect_dialog, null);
@@ -814,6 +799,7 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.setTitle("Sending File");
 
+        // on cancellation
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -822,10 +808,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // on accept
         btn_yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendReceive.write(caesarCipherEncryption(writeMsg, shift));
+                sendReceive.write(caesarCipherEncryption(writeMsg, shift)); // sending it with proper encoding
                 alertDialog.dismiss();
             }
         });
@@ -833,6 +820,7 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    // reading the file text whenever it is selected
     private String readTextFile(Uri uri){
         BufferedReader reader = null;
         StringBuilder builder = new StringBuilder();
@@ -840,6 +828,7 @@ public class MainActivity extends AppCompatActivity {
             reader = new BufferedReader(new InputStreamReader(getContentResolver().openInputStream(uri)));
             String line = "";
 
+            // reading line by line and adding a \n at the end
             while ((line = reader.readLine()) != null) {
                 builder.append("\n" + line);
             }
@@ -858,12 +847,14 @@ public class MainActivity extends AppCompatActivity {
         return builder.toString();
     }
 
+    // getting file path using uri
     private String getFilePathFromUri(Uri uri){
         String path = uri.getPathSegments().get(1);
         path = Environment.getExternalStorageDirectory().getPath()+"/"+path.split(":")[1];
         return path;
     }
 
+    // opening disconnect dialog box
     private void openDisconnectAlertDialogBox() {
         final AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.custom_disconnect_dialog, null);
@@ -898,10 +889,12 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    // disconnect main function
     public void disconnectHim() {
 
+        // closing client and server socket, means closing sending and receiving port
+        // changing layout and background
         try {
-            //sendReceive.socket.close();
             clientClass.socket.close();
             serverClass.socket.close();
 
@@ -931,20 +924,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // whenever on start server is clicked
     public void onStartServerClicked(View v){
-        String port = receivePortEditText.getText().toString();
+        String port = receivePortEditText.getText().toString(); // getting the port from edittext
 
+        // checking if port is empty or not
         if(TextUtils.isEmpty(port)){
-            receivePortEditText.requestFocus();
-            receivePortEditText.setError("Please write your receive port first");
+            receivePortEditText.requestFocus(); // focusing as an error
+            receivePortEditText.setError("Please write your receive port first"); // showing what need to avoid the error
         }
 
-
+        // if there's a valid input then create a server class on that port so that the client can take data from that port
         else{
             try{
                 serverClass = new ServerClass(Integer.parseInt(port));
                 serverClass.start();
                 Toast.makeText(this, "Server has been started..", Toast.LENGTH_SHORT).show();
+
+                // showing the further information
                 targetIPEditText.setVisibility(View.VISIBLE);
                 targetPortEditText.setVisibility(View.VISIBLE);
                 connectBtn.setVisibility(View.VISIBLE);
@@ -959,30 +956,32 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // on connect clicked
     public void onConnectClicked(View v){
 
         String port = targetPortEditText.getText().toString();
         String tergetIP = targetIPEditText.getText().toString();
-        String encrypKey = encrypKeyEditText.getText().toString();
+        String encrypKey = encrypKeyEditText.getText().toString(); // takling the encryption key shift number
         shift = Integer.parseInt(encrypKey);
 
-
-
+        // checking is empty or not
         if(TextUtils.isEmpty(port)){
             targetPortEditText.requestFocus();
             targetPortEditText.setError("Please write your target port first");
         }
 
+        // checking self ip or not
         else if(tergetIP.equals(ip)){
             targetIPEditText.requestFocus();
             targetIPEditText.setError("This is your self IP, please change it");
         }
 
-
+        // else connect him, and redirect to chat screen
         else{
             try{
                 clientClass = new ClientClass(tergetIP, Integer.parseInt(port));
                 clientClass.start();
+                // showing success message
                 Toast.makeText(MainActivity.this, "your sending port and listening port has been set successfully", Toast.LENGTH_SHORT).show();
             }catch (Exception e){
                 Log.d(TAG, "ERROR: "+e);
@@ -992,12 +991,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // on sending click
     public void onSendClicked(View v){
-
-        String msg = messageEditText.getText().toString().trim();
+        String msg = messageEditText.getText().toString().trim(); // getting the typed messages excluding new line first and last
         String msgTime = "@%@" + getTime(false);
-        String msgWithTime = msg + msgTime;
+        String msgWithTime = msg + msgTime; // sending message with time
 
+        // you need to type some before sending
         if(TextUtils.isEmpty(msg)){
             messageEditText.requestFocus();
             messageEditText.setError("Please write your message first");
@@ -1005,11 +1005,12 @@ public class MainActivity extends AppCompatActivity {
         else
         {
             //sendReceive.write("message@%@"+msg);
-            sendReceive.write(caesarCipherEncryption(msgWithTime, shift));
+            sendReceive.write(caesarCipherEncryption(msgWithTime, shift)); // send the encrypted message
         }
 
     }
 
+    // getting ip
     public void onGetIPClicked(View view) {
 
         ip = Utils.getIPAddress(true);
@@ -1042,6 +1043,7 @@ public class MainActivity extends AppCompatActivity {
         takeVoiceForHim();
     }
 
+    // sending and receiving socket
     private class SendReceive extends Thread {
         private Socket socket;
         private InputStream inputStream;
@@ -1073,7 +1075,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-
+        // writing
         public void write(String msg) {
             new Thread(() -> {
                 try {
@@ -1092,6 +1094,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // server class for listening
     public class ServerClass extends Thread {
 
         Socket socket;
@@ -1127,6 +1130,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // client class for sending
     public class ClientClass extends Thread {
         Socket socket;
         String hostAdd;
@@ -1140,10 +1144,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void run() {
             try {
-
-                //System.setProperty("javax.net.ssl.trustStore", "za.store");
-
-                //socket = ((SSLSocketFactory)SSLSocketFactory.getDefault()).createSocket(hostAdd, port);
                 socket = new Socket(hostAdd, port);
 
                 sendReceive = new SendReceive(socket);
@@ -1151,6 +1151,8 @@ public class MainActivity extends AppCompatActivity {
                 showToast("Connected to other device. You can now exchange messages.");
 
                 Log.d(TAG, "Client is connected to server");
+
+                // enabling invisible components
                 enableComponent();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -1161,12 +1163,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // add mesage method
     private void addMessage(int color, String message) {
 
         runOnUiThread(() -> {
                     TextView textView = new TextView(this);
                     TextView msgTime = new TextView(this);
 
+                    // if it's a sender message
                     if (color == Color.parseColor("#FCE4EC")
                             && !(caesarCipherDecryption(message, shift).contains("bg@%@bg"))
                             && !(caesarCipherDecryption(message, shift).contains("diconnect@%@d"))
@@ -1202,7 +1206,9 @@ public class MainActivity extends AppCompatActivity {
                         msgTime.setLayoutParams(lp4);
 
                         //textView.setBackgroundResource(R.drawable.sender_messages_layout);
-                    } else if(!(caesarCipherDecryption(message, shift).contains("bg@%@bg"))
+                    }
+                    // else if receiver message
+                    else if(!(caesarCipherDecryption(message, shift).contains("bg@%@bg"))
                             && !(caesarCipherDecryption(message, shift).contains("diconnect@%@d"))
                             && !(caesarCipherDecryption(message, shift).contains("file@%@"))
                             && !(caesarCipherDecryption(message, shift).contains("remove@%@"))) {
@@ -1241,6 +1247,7 @@ public class MainActivity extends AppCompatActivity {
 
                     String[]  messages = actualMessage.split("@%@", 0);
 
+                    // if its a file
                     if(messages[0].equals("file")){
                         textView.setPadding(0,0,0,0);
 
@@ -1260,6 +1267,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                     }
+                    // if its a remove message
                     else if(messages[0].equals("remove")){
                         textView.setPadding(0,0,0,0);
 
@@ -1276,6 +1284,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                     }
+                    // if its a bg change message
                     else if(actualMessage.contains("bg@%@bg")){
                         changeBGforHim(actualMessage);
                         textView.setPadding(0,0,0,0);
@@ -1287,7 +1296,7 @@ public class MainActivity extends AppCompatActivity {
                         textView.setGravity(Gravity.CENTER);
                         textView.setText("Background has been changed");
                     }
-
+                    // if its a disconnect message
                     else if(actualMessage.contains("diconnect@%@d")){
                         textView.setPadding(0,0,0,0);
 
@@ -1297,29 +1306,30 @@ public class MainActivity extends AppCompatActivity {
                         textView.setText("Your Pair has been disconnected.");
 
                     }
-                    //String actualMessage = editMessage(message);
+                    // else it's a normal message
                     else{
                         Log.d(TAG, "messages[0]: " +messages[0]);
                         Log.d(TAG, "messages[0]: " +messages[1]);
 
                         textView.setTextSize(20);
-                        textView.setText(messages[0]);
+                        textView.setText(messages[0]); // setting message on the message textview
 
-                        msgTime.setText("(" + getTime(false) + ")");
+                        msgTime.setText("(" + getTime(false) + ")"); // setting messing time
                     }
 
 
                     // creating divider between two messages
                     addDividerBetweenTwoMessages();
 
-
+                    // adding 2 more views in linear layout every time
                     conversationLayout.addView(textView);
                     conversationLayout.addView(msgTime);
-                    conversations.post(() -> conversations.fullScroll(View.FOCUS_DOWN));
+                    conversations.post(() -> conversations.fullScroll(View.FOCUS_DOWN)); // for getting last message in first
                 }
         );
     }
 
+    // adding divider method
     private void addDividerBetweenTwoMessages() {
         ImageView divider = new ImageView(this);
         conversationLayout.addView(divider);
@@ -1329,11 +1339,12 @@ public class MainActivity extends AppCompatActivity {
         divider.setBackgroundColor(Color.TRANSPARENT);
     }
 
-
+    // custom show toast function
     public void showToast(String message) {
         runOnUiThread(() -> Toast.makeText(this, message, Toast.LENGTH_SHORT).show());
     }
 
+    // enabling component on creating client class
     public void enableComponent() {
         runOnUiThread(() -> {
             firstLayout.setVisibility(View.GONE);
@@ -1346,6 +1357,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // caesar cipher encryption, every message, sending through socket, is encrypted for security purpose
     public static String caesarCipherEncryption(String plainText, int shift){
         if( shift > 26 ) shift = shift % 26;
         else if( shift < 0 ) shift = (shift % 26) + 26;
@@ -1382,6 +1394,7 @@ public class MainActivity extends AppCompatActivity {
         return cipherText;
     }
 
+    // decreption on the other end
     public static String caesarCipherDecryption(String plainText, int shift){
         if( shift > 26 ) shift = shift % 26;
         else if( shift < 0 ) shift = (shift % 26) + 26;
