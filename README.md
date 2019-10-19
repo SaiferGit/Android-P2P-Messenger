@@ -29,7 +29,7 @@ ChitCat P2P Messeging App <b>[ [watch now](https://www.youtube.com/watch?v=NH8Uu
 <img  src="https://user-images.githubusercontent.com/44334473/67149486-8f6ccb00-f2cd-11e9-988c-6492dafbfec6.png"  height = "400"/> </p>
 
 <p  align="center"  >
-<img  src="(https://user-images.githubusercontent.com/44334473/67149592-d14a4100-f2ce-11e9-90e2-58fe9c58b1fa.png"  height = "400"/> </p>
+<img  src="https://user-images.githubusercontent.com/44334473/67149592-d14a4100-f2ce-11e9-90e2-58fe9c58b1fa.png"  height = "400"/> </p>
 
 <p  align="center"  >
 <img  src="https://user-images.githubusercontent.com/44334473/67149594-d5765e80-f2ce-11e9-9fb5-ac7dcbda5521.png"  height = "400"/> </p>
