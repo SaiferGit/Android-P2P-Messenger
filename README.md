@@ -5,7 +5,7 @@ ChitChat is a Network Layer messenger application that runs on Android environme
 ChitCat P2P Messeging App <b>[ [watch now](https://youtu.be/NWUtz-ucuyA) ] </b>
 
 ## Features Implemented
-- IP address and port number login
+- IP address and port number login using socket
 - A beautiful UI for exchanged data
 - Sharing textual files
 - Save the exchanged messages whenever anyone wants
