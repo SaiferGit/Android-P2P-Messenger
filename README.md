@@ -19,6 +19,7 @@ ChitCat P2P Messeging App <b>[ [watch now](https://www.youtube.com/watch?v=NH8Uu
 - Own App Icon with own  designed app logo, Splash Screen
 - In total 10 types of UI for conversations
 - get own network IP
+- reset layout option
 - text selectable, can be copied, pasted, shared
 
 ### To know detail, go to readme.txt
