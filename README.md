@@ -2,7 +2,7 @@
 ChitChat is a Network Layer messenger application that runs on Android environment. It supports only p2p data exchanging, built using Native Android. So Android phone is needed to run this app.
 
 # Youtube Link of how our app works:
-ChitCat P2P Messeging App <b>[ [watch now](https://youtu.be/NWUtz-ucuyA) ] </b>
+ChitCat P2P Messeging App <b>[ [watch now](https://www.youtube.com/watch?v=NH8UuVdsCWM) ] </b>
 
 ## Features Implemented
 - IP address and port number login using socket
@@ -25,13 +25,9 @@ ChitCat P2P Messeging App <b>[ [watch now](https://youtu.be/NWUtz-ucuyA) ] </b>
 
 # Some Snapshots:
 
-![](https://user-images.githubusercontent.com/44334473/66875097-eec99300-efce-11e9-97c7-8ee44266fd46.png)
+<p  align="center"  >
+<img  src="https://user-images.githubusercontent.com/44334473/67149486-8f6ccb00-f2cd-11e9-988c-6492dafbfec6.png"  height = "400"/> </p>
 
-![](https://user-images.githubusercontent.com/44334473/66875104-f1c48380-efce-11e9-8ad2-0a2e26dbc45e.png)
-
-![](https://user-images.githubusercontent.com/44334473/66875110-fab55500-efce-11e9-9013-fc1f23fb7669.png)
-
-![](https://user-images.githubusercontent.com/44334473/66875112-fdb04580-efce-11e9-9897-64bc9389cf77.png)
 
 ## Authors
 - <b>[Munshi Saif](https://github.com/SaiferGit)</b>
