@@ -53,7 +53,7 @@
             android:layout_centerHorizontal="true"
             android:background="@drawable/rounded_corners"
             android:padding="2dp"
-            android:text="Start Server"
+            android:text="Start Listen"
             android:textStyle="bold"
             android:textAllCaps="false"
             android:textColor="@android:color/background_light"

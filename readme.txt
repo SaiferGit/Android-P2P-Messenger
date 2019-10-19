@@ -1,3 +1,4 @@
+
 		************************************************************************************
 		************************************************************************************
 		*********     CSE 362 Project: P2P messaging System on Android platform    *********
@@ -54,12 +55,14 @@
 		|					 |  shared  				    |
 		|----------------------------------------|------------------------------------------|
 		|					 |  get own network IP			    |
+		|----------------------------------------|------------------------------------------|
+		|					 |  reset layout as default 		    |
 		|________________________________________|__________________________________________|
 	
 
 	        [ A demo example is given here(showing how to run and how the app works) as: 
-		   part1.webm & part2.webm. you can find it on the main directory of our zip, 
-		   inside the folder named "app demo videos" just where you find this readme.txt]
+		  ChitChat.mp4. you can find it on the main directory of our zip, just where you find 
+		  this readme.txt]
 		_____________________________________________________________________________________
 		|>>>>>>>>>>>>>>>>>>>>             How to run this app?         <<<<<<<<<<<<<<<<<<<<<|
 		|_______|___________________________________________________________________________|                  
@@ -111,7 +114,7 @@
 			|      |and share the selected text.  					    |
 		|-------|------|--------------------------------------------------------------------| 
 		|   5.  |   In top right corner you can see a menu bar. Tap the menu bar and it will|
-		|       | pop up 5 options.                                                         |
+		|       | pop up 6 options.                                                         |
 		|-------|------|                                                             |------|
 			|    i.|    By clicking Save Chat, you can save your exchanged messages.    |
         		|      |The chat will be saved on: 					    |
@@ -126,7 +129,10 @@
   			|  iv. |    By clicking Remove All Chat, you can remove all the conversation|
  			|      |for yourself and as well as for the other peer.			    |
 		 	|------|--------------------------------------------------------------------|
-  			|  v.  |    By clicking Voice Mode: OFF, you can enable Voice Mode: ON and  |
+  			|  v.  |    By clicking reset layout, you can reset the background as defult|
+ 			|      |for both you and your peer.					    |
+		 	|------|--------------------------------------------------------------------|
+  			|  vi. |    By clicking Voice Mode: OFF, you can enable Voice Mode: ON and  |
  			|      |can commands for all the functionalities using specific voice       |
 			|      |command.							    |
 		|-------|------|--------------------------------------------------------------------|
@@ -185,6 +191,9 @@
 		|		  |chat from own window, just remove all the views programatically  |
 		|		  |and the other by  removing all the chat for both window.	    |
 		|-----------------|-----------------------------------------------------------------|
+		|Reset Layout     |	Here by reseting layout, you can reset your layout(BG) as   |
+		|		  |default for both window. just changed the background like others |
+		|-----------------|-----------------------------------------------------------------|
 		|Voice Mode:      |	Specific commands are given as voice input when the mode is |
 		|	ON/OFF	  |enabled. A new voice icon is added when the mode is enabled, you |
 		|		  |can exchange messages also through this command		    |
@@ -202,7 +211,7 @@
 		| messenger application should contain. We have added a bunch of extra features that|
 		| is mentioned above.Used too simple logic and stored well documentation for	    | 
 		| understanding what is going on through the whole code. We have implemented the    |
-		| whole thing using java socket </b> which is the foundation level requirements. The|
+		| whole thing using java socket which is the foundation level requirements. The     |
 		| program works so perfectly with the magical GUI. So we think our project is 	    |
 		| correct.									    | 
 		|___________________________________________________________________________________|
@@ -213,8 +222,8 @@
 		|Tajkia did:| BG change, saving conversations, splash screen, app icon design, 	    |
 		|           | app logo design, designing beautiful UI and magical GUI, background   |
 		|	    | picture selection, chat disconnect option, text selectable, can be    | 
-		|	    | copied, pasted, shared,removing chat history, voice enable mood,      |
-		|	    | chat history time, app running, testing.				    |
+		|	    | copied, pasted, shared,removing chat history, reset layout voice      |
+		|	    | enable mood, chat history time, app running, testing.		    |
 		|-----------|-----------------------------------------------------------------------|
 		|Saif did:  | Socket desiging, file sending, exchanging messages, Caesar Cipher     |
 		|           | encryption system, exchanged messages using voice, designing beautiful| 
@@ -227,7 +236,8 @@
 		  	1. Menu Item: voice mode 
 		  	2. sending and receiving end message exchanging time added.
 		  	3. chat histry with exchanged messages time.
-		  	4. Layout updated.
+		  	4. Layout design updated.
+			5. Reset Layout
   
 
    		

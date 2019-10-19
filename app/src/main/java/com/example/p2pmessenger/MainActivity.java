@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     ImageButton sendButton, voiceMsgOn, attachmentBtn;
     TextView clickHereBtn;
 
-    MenuItem changeBG, saveChat, disconnect, removeAllChat,voiceMode;
+    MenuItem changeBG, saveChat, disconnect, removeAllChat,voiceMode, resetLayout;
 
     ServerClass serverClass;
     ClientClass clientClass;
@@ -158,12 +158,14 @@ public class MainActivity extends AppCompatActivity {
         disconnect = menu.findItem(R.id.main_disconnect_option);
         removeAllChat = menu.findItem(R.id.main_remove_chat_option);
         voiceMode = menu.findItem(R.id.main_voice_mode);
+        resetLayout = menu.findItem(R.id.main_reset_layout);
 
         changeBG.setEnabled(false);
         saveChat.setEnabled(false);
         disconnect.setEnabled(false);
         removeAllChat.setEnabled(false);
         voiceMode.setEnabled(false);
+        resetLayout.setEnabled(false);
 
         return true;
     }
@@ -188,7 +190,51 @@ public class MainActivity extends AppCompatActivity {
 
         if(item.getItemId() == R.id.main_voice_mode)
             voiceModeOperation();
+
+        if(item.getItemId() == R.id.main_reset_layout)
+            resetLayoutAlertDialog();
         return true;
+    }
+
+    private void resetLayoutAlertDialog() {
+        final AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+        View mView = getLayoutInflater().inflate(R.layout.custom_disconnect_dialog, null);
+
+        TextView textView = mView.findViewById(R.id.custom_disconnect_dialog_textView);
+        textView.setText("Are you sure you want to reset your layout?");
+        Button btn_cancel = (Button) mView.findViewById(R.id.btn_cancel);
+        Button btn_yes = (Button) mView.findViewById(R.id.btn_yes);
+
+        alert.setView(mView);
+
+        final AlertDialog alertDialog = alert.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.setTitle("Reseting Layout");
+
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Cancelled", Toast.LENGTH_SHORT).show();
+                alertDialog.dismiss();
+            }
+        });
+
+        btn_yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // saving chat on confirmation
+                resetLayoutForHim();
+                alertDialog.dismiss();
+            }
+        });
+
+        alertDialog.show();
+    }
+
+    private void resetLayoutForHim() {
+        sendReceive.write(caesarCipherEncryption("bg@%@bg0",shift));
+        thirdLayout.setBackgroundResource(R.drawable.background3);
+        mToolbar.setBackgroundColor(Color.parseColor("#233E4E"));
     }
 
     // on voice mode button selected
@@ -203,6 +249,7 @@ public class MainActivity extends AppCompatActivity {
             disconnect.setEnabled(false);
             changeBG.setEnabled(false);
             removeAllChat.setEnabled(false);
+            resetLayout.setEnabled(false);
             Toast.makeText(MainActivity.this, "Voice Mode Enabled", Toast.LENGTH_SHORT).show();
 
 
@@ -216,6 +263,7 @@ public class MainActivity extends AppCompatActivity {
             disconnect.setEnabled(true);
             changeBG.setEnabled(true);
             removeAllChat.setEnabled(true);
+            resetLayout.setEnabled(true);
             Toast.makeText(MainActivity.this, "Voice Mode Disabled", Toast.LENGTH_SHORT).show();
 
 
@@ -435,6 +483,10 @@ public class MainActivity extends AppCompatActivity {
         else if(msg.equals("bg@%@bg9")){
             thirdLayout.setBackgroundResource(R.drawable.background9);
             mToolbar.setBackgroundColor(Color.parseColor("#095061"));
+        }
+        else if(msg.equals("bg@%@bg0")){
+            thirdLayout.setBackgroundResource(R.drawable.background3);
+            mToolbar.setBackgroundColor(Color.parseColor("#233E4E"));
         }
     }
 
@@ -684,6 +736,7 @@ public class MainActivity extends AppCompatActivity {
                     int m = voiceCommand.compareToIgnoreCase("voice mode off");
                     int n = voiceCommand.compareToIgnoreCase("share a file");
                     boolean p = voiceCommand.contains("change background as ");
+                    int q = voiceCommand.compareToIgnoreCase("reset layout");
 
                     // doing change by voice by redirecting it to the related function
                     if(x == 0){
@@ -700,6 +753,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                     else if(n == 0){
                         openStorage();
+                    }
+                    else if(q == 0){
+                        resetLayoutAlertDialog();
                     }
                     // changing background
                     else if(p){
@@ -1294,7 +1350,12 @@ public class MainActivity extends AppCompatActivity {
                         textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
                         conversationLayout.setGravity(View.TEXT_ALIGNMENT_CENTER);
                         textView.setGravity(Gravity.CENTER);
-                        textView.setText("Background has been changed");
+                        if(actualMessage.equals("bg@%@bg0")){
+                            textView.setText("Background reset to default");
+                        }
+                        else
+                            textView.setText("Background has been changed");
+
                     }
                     // if its a disconnect message
                     else if(actualMessage.contains("diconnect@%@d")){
@@ -1354,6 +1415,7 @@ public class MainActivity extends AppCompatActivity {
             disconnect.setEnabled(true);
             removeAllChat.setEnabled(true);
             voiceMode.setEnabled(true);
+            resetLayout.setEnabled(true);
         });
     }
 
