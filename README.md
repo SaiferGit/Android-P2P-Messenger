@@ -23,7 +23,7 @@ ChitCat P2P Messeging App <b>[ [watch now](https://www.youtube.com/watch?v=NH8Uu
 - reset layout option
 - text selectable, can be copied, pasted, shared
 
-### To know detail, go to (readme.txt)[https://github.com/SaiferGit/Android-P2P-Messenger/blob/master/readme.txt]
+### To know detail, go to [readme.txt](https://github.com/SaiferGit/Android-P2P-Messenger/blob/master/readme.txt)
 
 # Some Snapshots:
 
