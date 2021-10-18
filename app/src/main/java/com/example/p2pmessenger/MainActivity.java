@@ -41,8 +41,11 @@ import android.widget.Toast;
 
 import org.w3c.dom.Document;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -52,6 +55,8 @@ import java.io.OutputStream;
 import java.lang.invoke.LambdaConversionException;
 import java.net.ServerSocket;
 import java.net.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
@@ -711,15 +716,26 @@ public class MainActivity extends AppCompatActivity {
             File file = new File(path);
             if(file.exists())
                 Log.d(TAG, "Selected file exists");
-
-
+            int size = (int) file.length();
+            byte[] bytes = new byte[size];
             String fileText = readTextFile(uri); // getting files inside information.
             Log.d(TAG, "text inside file: "+fileText);
 
             // sending the file with a special code for recognize other end.
             // file code + file name + code + inside file information
-            String writeMsg = "file@%@"+file.getName()+"@%@"+fileText;
-            sendFilesALertDialog(writeMsg); // confirming before sending
+            String writeMsg = "file@%@"+file.getName();
+            try {
+                BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
+                buf.read(bytes, 0, bytes.length);
+                buf.close();
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            sendFilesALertDialog(writeMsg, bytes); // confirming before sending
         }
 
         // if request is a voice input then
@@ -840,7 +856,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // after selecting file, a dialog will be opened for confirmation
-    private void sendFilesALertDialog(String writeMsg) {
+    private void sendFilesALertDialog(String writeMsg, byte[] bytes) {
         final AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
         View mView = getLayoutInflater().inflate(R.layout.custom_disconnect_dialog, null);
 
@@ -868,7 +884,7 @@ public class MainActivity extends AppCompatActivity {
         btn_yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendReceive.write(caesarCipherEncryption(writeMsg, shift)); // sending it with proper encoding
+                sendReceive.writeFile(bytes, writeMsg); // sending it with proper encoding
                 alertDialog.dismiss();
             }
         });
@@ -1148,6 +1164,23 @@ public class MainActivity extends AppCompatActivity {
             }).start();
 
         }
+
+        public void writeFile(byte[] bytes, String msg) {
+            new Thread(() -> {
+                try {
+                    outputStream.write(bytes);
+                    addMessage(Color.parseColor("#FCE4EC"), msg);
+                    runOnUiThread(() ->
+                            messageEditText.setText("")
+                    );
+                } catch (IOException e) {
+                    Log.d(TAG, "Can't send message: " + e);
+                } catch (Exception e) {
+                    Log.d(TAG, "Error: " + e);
+                }
+            }).start();
+
+        }
     }
 
     // server class for listening
@@ -1314,7 +1347,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                         Log.d(TAG, "File Name: "+messages[1]);
-                        Log.d(TAG, "File Contains:\n "+messages[2]);
+
                         if(color == Color.parseColor("#FCE4EC"))
                             textView.setText(messages[1]+" has been sent");
                         else{
