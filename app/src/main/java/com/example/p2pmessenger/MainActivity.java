@@ -689,7 +689,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void openStorage() {
         // creating new gallery intent for selecting text file only
-        Intent intent = new Intent().setType("text/plain").setAction(Intent.ACTION_GET_CONTENT);
+        Intent intent = new Intent().setType("image/*").setAction(Intent.ACTION_GET_CONTENT);
         // called a override method for starting gallery intent
         startActivityForResult(Intent.createChooser(intent, "Select a TXT file"), 123);
 
@@ -1358,7 +1358,7 @@ public class MainActivity extends AppCompatActivity {
                             textView.setText(messages[1]+" has been sent");
                         else{
                             textView.setText(messages[1]+" has been received and downloaded on android/data/com.example.p2p/");
-                            writeToFile(messages[2], false, messages[1]);
+                            //writeToFile(messages[2], false, messages[1]);
                         }
 
                     }
