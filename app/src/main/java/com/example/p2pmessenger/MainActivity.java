@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -1151,8 +1153,9 @@ public class MainActivity extends AppCompatActivity {
         public void write(String msg) {
             new Thread(() -> {
                 try {
+                    byte[] bytes = new byte[0];
                     outputStream.write(msg.getBytes());
-                    addMessage(Color.parseColor("#FCE4EC"), msg);
+                    addMessage(Color.parseColor("#FCE4EC"), msg, bytes);
                     runOnUiThread(() ->
                             messageEditText.setText("")
                     );
@@ -1169,7 +1172,7 @@ public class MainActivity extends AppCompatActivity {
             new Thread(() -> {
                 try {
                     outputStream.write(bytes);
-                    addMessage(Color.parseColor("#FCE4EC"), msg);
+                    addMessage(Color.parseColor("#FCE4EC"), msg, bytes);
                     runOnUiThread(() ->
                             messageEditText.setText("")
                     );
@@ -1253,10 +1256,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // add mesage method
-    private void addMessage(int color, String message) {
+    private void addMessage(int color, String message, byte[] bytes) {
 
         runOnUiThread(() -> {
                     TextView textView = new TextView(this);
+                    ImageView imageView = new ImageView(this);
                     TextView msgTime = new TextView(this);
 
                     // if it's a sender message
@@ -1344,8 +1348,9 @@ public class MainActivity extends AppCompatActivity {
                         textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
                         conversationLayout.setGravity(View.TEXT_ALIGNMENT_CENTER);
                         textView.setGravity(Gravity.CENTER);
-
-
+                        conversationLayout.addView(imageView);
+                        Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, imageView.getWidth(), imageView.getHeight(), false));
                         Log.d(TAG, "File Name: "+messages[1]);
 
                         if(color == Color.parseColor("#FCE4EC"))
