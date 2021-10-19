@@ -109,8 +109,9 @@ public class MainActivity extends AppCompatActivity {
 
             if (msg.what == MESSAGE_READ) {
                 byte[] readBuff = (byte[]) msg.obj;
+                byte[] bytes = new byte[0];
                 String tempMsg = new String(readBuff, 0, msg.arg1);
-                addMessage(Color.parseColor("#FFFFFF"), tempMsg);
+                addMessage(Color.parseColor("#FFFFFF"), tempMsg, bytes);
             }
             return true;
         }
