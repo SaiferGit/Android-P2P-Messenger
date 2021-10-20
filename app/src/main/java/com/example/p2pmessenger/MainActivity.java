@@ -41,6 +41,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.p2pmessenger.network.logic.NetworkManager;
+import com.example.p2pmessenger.utils.Constants;
+
 import org.w3c.dom.Document;
 
 import java.io.BufferedInputStream;
@@ -68,7 +71,7 @@ import okhttp3.internal.Util;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText receivePortEditText, targetPortEditText, messageEditText, targetIPEditText, encrypKeyEditText;
+    public EditText receivePortEditText, targetPortEditText, messageEditText, targetIPEditText, encrypKeyEditText;
     RelativeLayout firstLayout, thirdLayout;
     Button connectBtn, getIPBtn;
     ImageButton sendButton, voiceMsgOn, attachmentBtn;
@@ -76,9 +79,9 @@ public class MainActivity extends AppCompatActivity {
 
     MenuItem changeBG, saveChat, disconnect, removeAllChat,voiceMode, resetLayout;
 
-    ServerClass serverClass;
-    ClientClass clientClass;
-    SendReceive sendReceive;
+    private NetworkManager networkManager;
+//    ServerClass serverClass;
+//    ClientClass clientClass;
 
     ScrollView conversations;
     LinearLayout conversationLayout;
@@ -93,8 +96,8 @@ public class MainActivity extends AppCompatActivity {
     int shift = 0;
 
 
-    static final int MESSAGE_READ=1;
-    static final String TAG = "trap";
+
+
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
@@ -103,11 +106,11 @@ public class MainActivity extends AppCompatActivity {
     };
 
 
-    Handler handler=new Handler(new Handler.Callback() {
+    public Handler handler=new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
 
-            if (msg.what == MESSAGE_READ) {
+            if (msg.what == Constants.MESSAGE_READ) {
                 byte[] readBuff = (byte[]) msg.obj;
                 byte[] bytes = new byte[0];
                 String tempMsg = new String(readBuff, 0, msg.arg1);
@@ -127,6 +130,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initialization() {
+
+        networkManager = new NetworkManager(this);
 
         // referencing variables with layout
         mToolbar = findViewById(R.id.main_page_toolbar);
@@ -240,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void resetLayoutForHim() {
-        sendReceive.write(caesarCipherEncryption("bg@%@bg0",shift));
+        networkManager.sendReceive.write(caesarCipherEncryption("bg@%@bg0",shift));
         thirdLayout.setBackgroundResource(R.drawable.background3);
         mToolbar.setBackgroundColor(Color.parseColor("#233E4E"));
     }
@@ -339,11 +344,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // if user selects checkbox also, we will remove all the chat for everyone. so sending a code to the other end
                 if(cbRemoveForAll.isChecked()){
-                    sendReceive.write(caesarCipherEncryption("remove@%@", shift));
+                    networkManager.sendReceive.write(caesarCipherEncryption("remove@%@", shift));
                 }
                 // remove self chat
                 removeAllChatForHim();
-                Log.d(TAG, "Remove all chat Msg: " +caesarCipherEncryption("diconnect@%@d", shift)); // notify user
+                Log.d(Constants.TAG, "Remove all chat Msg: " +caesarCipherEncryption("diconnect@%@d", shift)); // notify user
                 alertDialog.dismiss();
             }
         });
@@ -383,62 +388,62 @@ public class MainActivity extends AppCompatActivity {
         // when each of a layout is selected, a coded message is sending other end so that we can change it for other end also
         layout1.setOnClickListener((v) -> {
             String msg =  "bg@%@bg1";
-            sendReceive.write(caesarCipherEncryption(msg, shift));
+            networkManager.sendReceive.write(caesarCipherEncryption(msg, shift));
             Toast.makeText(MainActivity.this, "background is selected as LAYOUT 1", Toast.LENGTH_SHORT).show();
             alertDialog.dismiss();
         });
 
         layout2.setOnClickListener((v) -> {
             String msg =  "bg@%@bg2";
-            sendReceive.write(caesarCipherEncryption(msg,shift));
+            networkManager.sendReceive.write(caesarCipherEncryption(msg,shift));
             Toast.makeText(MainActivity.this, "background is selected as LAYOUT 2", Toast.LENGTH_SHORT).show();
             alertDialog.dismiss();
         });
 
         layout3.setOnClickListener((v) -> {
             String msg =  "bg@%@bg3";
-            sendReceive.write(caesarCipherEncryption(msg,shift));
+            networkManager.sendReceive.write(caesarCipherEncryption(msg,shift));
             Toast.makeText(MainActivity.this, "background is selected as LAYOUT 3", Toast.LENGTH_SHORT).show();
             alertDialog.dismiss();
         });
 
         layout4.setOnClickListener((v) -> {
             String msg =  "bg@%@bg4";
-            sendReceive.write(caesarCipherEncryption(msg, shift));
+            networkManager.sendReceive.write(caesarCipherEncryption(msg, shift));
             Toast.makeText(MainActivity.this, "background is selected as LAYOUT 4", Toast.LENGTH_SHORT).show();
             alertDialog.dismiss();
         });
         layout5.setOnClickListener((v)-> {
             String msg =  "bg@%@bg5";
-            sendReceive.write(caesarCipherEncryption(msg, shift));
+            networkManager.sendReceive.write(caesarCipherEncryption(msg, shift));
             Toast.makeText(MainActivity.this, "background is selected as LAYOUT 5", Toast.LENGTH_SHORT).show();
             alertDialog.dismiss();
         });
 
         layout6.setOnClickListener((v) -> {
             String msg =  "bg@%@bg6";
-            sendReceive.write(caesarCipherEncryption(msg, shift));
+            networkManager.sendReceive.write(caesarCipherEncryption(msg, shift));
             Toast.makeText(MainActivity.this, "background is selected as LAYOUT 6", Toast.LENGTH_SHORT).show();
             alertDialog.dismiss();
         });
 
         layout7.setOnClickListener((v) -> {
             String msg =  "bg@%@bg7";
-            sendReceive.write(caesarCipherEncryption(msg, shift));
+            networkManager.sendReceive.write(caesarCipherEncryption(msg, shift));
             Toast.makeText(MainActivity.this, "background is selected as LAYOUT 7", Toast.LENGTH_SHORT).show();
             alertDialog.dismiss();
         });
 
         layout8.setOnClickListener((v) -> {
             String msg =  "bg@%@bg8";
-            sendReceive.write(caesarCipherEncryption(msg, shift));
+            networkManager.sendReceive.write(caesarCipherEncryption(msg, shift));
             Toast.makeText(MainActivity.this, "background is selected as LAYOUT 8", Toast.LENGTH_SHORT).show();
             alertDialog.dismiss();
         });
 
         layout9.setOnClickListener((v) -> {
             String msg =  "bg@%@bg9";
-            sendReceive.write(caesarCipherEncryption(msg, shift));
+            networkManager.sendReceive.write(caesarCipherEncryption(msg, shift));
             Toast.makeText(MainActivity.this, "background is selected as LAYOUT 9", Toast.LENGTH_SHORT).show();
             alertDialog.dismiss();
         });
@@ -613,11 +618,11 @@ public class MainActivity extends AppCompatActivity {
             stream.write(data.getBytes()); // writing
             stream.close(); // closing the stream
             Toast.makeText(this, "File Succcessfully Saved!", Toast.LENGTH_SHORT).show();
-            Log.d(TAG, data);
+            Log.d(Constants.TAG, data);
         } catch (FileNotFoundException e) {
-            Log.d(TAG, e.toString());
+            Log.d(Constants.TAG, e.toString());
         } catch (IOException e) {
-            Log.d(TAG, e.toString());
+            Log.d(Constants.TAG, e.toString());
         }
     }
 
@@ -718,11 +723,11 @@ public class MainActivity extends AppCompatActivity {
             String path = getFilePathFromUri(uri); // getting file path
             File file = new File(path);
             if(file.exists())
-                Log.d(TAG, "Selected file exists");
+                Log.d(Constants.TAG, "Selected file exists");
             int size = (int) file.length();
             byte[] bytes = new byte[size];
             String fileText = readTextFile(uri); // getting files inside information.
-            Log.d(TAG, "text inside file: "+fileText);
+            Log.d(Constants.TAG, "text inside file: "+fileText);
 
             // sending the file with a special code for recognize other end.
             // file code + file name + code + inside file information
@@ -790,55 +795,55 @@ public class MainActivity extends AppCompatActivity {
 
                         if(layout1){
                             String msg =  "bg@%@bg1";
-                            sendReceive.write(caesarCipherEncryption(msg, shift));
+                            networkManager.sendReceive.write(caesarCipherEncryption(msg, shift));
                             Toast.makeText(MainActivity.this, "background is selected as LAYOUT 1", Toast.LENGTH_SHORT).show();
                         }
 
                         else if(layout2){
                             String msg =  "bg@%@bg2";
-                            sendReceive.write(caesarCipherEncryption(msg, shift));
+                            networkManager.sendReceive.write(caesarCipherEncryption(msg, shift));
                             Toast.makeText(MainActivity.this, "background is selected as LAYOUT 2", Toast.LENGTH_SHORT).show();
                         }
 
                         else if(layout3){
                             String msg =  "bg@%@bg3";
-                            sendReceive.write(caesarCipherEncryption(msg, shift));
+                            networkManager.sendReceive.write(caesarCipherEncryption(msg, shift));
                             Toast.makeText(MainActivity.this, "background is selected as LAYOUT 3", Toast.LENGTH_SHORT).show();
                         }
 
                         else if(layout4){
                             String msg = "bg@%@bg4";
-                            sendReceive.write(caesarCipherEncryption(msg, shift));
+                            networkManager.sendReceive.write(caesarCipherEncryption(msg, shift));
                             Toast.makeText(MainActivity.this, "background is selected as LAYOUT 4", Toast.LENGTH_SHORT).show();
                         }
 
                         else if(layout5){
                             String msg =  "bg@%@bg5";
-                            sendReceive.write(caesarCipherEncryption(msg, shift));
+                            networkManager.sendReceive.write(caesarCipherEncryption(msg, shift));
                             Toast.makeText(MainActivity.this, "background is selected as LAYOUT 5", Toast.LENGTH_SHORT).show();
                         }
 
                         else if(layout6){
                             String msg =  "bg@%@bg6";
-                            sendReceive.write(caesarCipherEncryption(msg, shift));
+                            networkManager.sendReceive.write(caesarCipherEncryption(msg, shift));
                             Toast.makeText(MainActivity.this, "background is selected as LAYOUT 6", Toast.LENGTH_SHORT).show();
                         }
 
                         else if(layout7){
                             String msg =  "bg@%@bg7";
-                            sendReceive.write(caesarCipherEncryption(msg, shift));
+                            networkManager.sendReceive.write(caesarCipherEncryption(msg, shift));
                             Toast.makeText(MainActivity.this, "background is selected as LAYOUT 7", Toast.LENGTH_SHORT).show();
                         }
 
                         else if(layout8){
                             String msg =  "bg@%@bg8";
-                            sendReceive.write(caesarCipherEncryption(msg, shift));
+                            networkManager.sendReceive.write(caesarCipherEncryption(msg, shift));
                             Toast.makeText(MainActivity.this, "background is selected as LAYOUT 8", Toast.LENGTH_SHORT).show();
                         }
 
                         else if(layout9){
                             String msg =  "bg@%@bg9";
-                            sendReceive.write(caesarCipherEncryption(msg, shift));
+                            networkManager.sendReceive.write(caesarCipherEncryption(msg, shift));
                             Toast.makeText(MainActivity.this, "background is selected as LAYOUT 9", Toast.LENGTH_SHORT).show();
                         }
 
@@ -887,7 +892,7 @@ public class MainActivity extends AppCompatActivity {
         btn_yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendReceive.writeFile(bytes, writeMsg); // sending it with proper encoding
+                networkManager.sendReceive.writeFile(bytes, writeMsg); // sending it with proper encoding
                 alertDialog.dismiss();
             }
         });
@@ -954,8 +959,8 @@ public class MainActivity extends AppCompatActivity {
         btn_yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendReceive.write(caesarCipherEncryption("diconnect@%@d", shift));
-                Log.d(TAG, "Disconnect Msg: " +caesarCipherEncryption("diconnect@%@d", shift));
+                networkManager.sendReceive.write(caesarCipherEncryption("diconnect@%@d", shift));
+                Log.d(Constants.TAG, "Disconnect Msg: " +caesarCipherEncryption("diconnect@%@d", shift));
                 disconnectHim();
                 alertDialog.dismiss();
             }
@@ -970,8 +975,8 @@ public class MainActivity extends AppCompatActivity {
         // closing client and server socket, means closing sending and receiving port
         // changing layout and background
         try {
-            clientClass.socket.close();
-            serverClass.socket.close();
+            networkManager.clientClass.socket.close();
+            networkManager.serverClass.socket.close();
 
 
             thirdLayout.setVisibility(View.GONE);
@@ -993,7 +998,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "chat is disconnected", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             e.printStackTrace();
-            Log.d(TAG, "ERROR/n"+e);
+            Log.d(Constants.TAG, "ERROR/n"+e);
 
             //Toast.makeText(MainActivity.this, "Error: " +e, Toast.LENGTH_LONG).show();
         }
@@ -1012,8 +1017,9 @@ public class MainActivity extends AppCompatActivity {
         // if there's a valid input then create a server class on that port so that the client can take data from that port
         else{
             try{
-                serverClass = new ServerClass(Integer.parseInt(port));
-                serverClass.start();
+                networkManager.createServerThread(port);
+//                networkManager.serverClass = new ServerClass(Integer.parseInt(port));
+                networkManager.serverClass.start();
                 Toast.makeText(this, "Server has been started..", Toast.LENGTH_SHORT).show();
 
                 // showing the further information
@@ -1054,12 +1060,13 @@ public class MainActivity extends AppCompatActivity {
         // else connect him, and redirect to chat screen
         else{
             try{
-                clientClass = new ClientClass(tergetIP, Integer.parseInt(port));
-                clientClass.start();
+                networkManager.createClientThread(tergetIP, port);
+//                clientClass = new ClientClass(tergetIP, Integer.parseInt(port));
+                networkManager.clientClass.start();
                 // showing success message
                 Toast.makeText(MainActivity.this, "your sending port and listening port has been set successfully", Toast.LENGTH_SHORT).show();
             }catch (Exception e){
-                Log.d(TAG, "ERROR: "+e);
+                Log.d(Constants.TAG, "ERROR: "+e);
                 Toast.makeText(MainActivity.this, "Can't connect with server, please check all the requirements", Toast.LENGTH_SHORT).show();
             }
         }
@@ -1079,8 +1086,8 @@ public class MainActivity extends AppCompatActivity {
         }
         else
         {
-            //sendReceive.write("message@%@"+msg);
-            sendReceive.write(caesarCipherEncryption(msgWithTime, shift)); // send the encrypted message
+            //networkManager.sendReceive.write("message@%@"+msg);
+            networkManager.sendReceive.write(caesarCipherEncryption(msgWithTime, shift)); // send the encrypted message
         }
 
     }
@@ -1118,146 +1125,8 @@ public class MainActivity extends AppCompatActivity {
         takeVoiceForHim();
     }
 
-    // sending and receiving socket
-    private class SendReceive extends Thread {
-        private Socket socket;
-        private InputStream inputStream;
-        private OutputStream outputStream;
-
-        public SendReceive(Socket skt) {
-            socket = skt;
-            try {
-                inputStream = socket.getInputStream();
-                outputStream = socket.getOutputStream();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void run() {
-            byte[] buffer = new byte[1024];
-            int bytes;
-
-            while (socket != null) {
-                try {
-                    bytes = inputStream.read(buffer);
-                    if (bytes > 0) {
-                        handler.obtainMessage(MESSAGE_READ, bytes, -1, buffer).sendToTarget();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        // writing
-        public void write(String msg) {
-            new Thread(() -> {
-                try {
-                    byte[] bytes = new byte[0];
-                    outputStream.write(msg.getBytes());
-                    addMessage(Color.parseColor("#FCE4EC"), msg, bytes);
-                    runOnUiThread(() ->
-                            messageEditText.setText("")
-                    );
-                } catch (IOException e) {
-                    Log.d(TAG, "Can't send message: " + e);
-                } catch (Exception e) {
-                    Log.d(TAG, "Error: " + e);
-                }
-            }).start();
-
-        }
-
-        public void writeFile(byte[] bytes, String msg) {
-            new Thread(() -> {
-                try {
-                    outputStream.write(bytes);
-                    addMessage(Color.parseColor("#FCE4EC"), msg, bytes);
-                    runOnUiThread(() ->
-                            messageEditText.setText("")
-                    );
-                } catch (IOException e) {
-                    Log.d(TAG, "Can't send message: " + e);
-                } catch (Exception e) {
-                    Log.d(TAG, "Error: " + e);
-                }
-            }).start();
-
-        }
-    }
-
-    // server class for listening
-    public class ServerClass extends Thread {
-
-        Socket socket;
-        ServerSocket serverSocket;
-        int port;
-
-        public ServerClass(int port) {
-            this.port = port;
-        }
-
-        @Override
-        public void run() {
-            try {
-
-                //System.setProperty("javax.net.ssl.keyStore", "za.store");
-                //System.setProperty("javax.net.ssl.keyStorePassword", "password");
-
-                //serverSocket = ((SSLServerSocketFactory)SSLServerSocketFactory.getDefault()).createServerSocket(port);
-                serverSocket = new ServerSocket(port);
-                Looper.prepare();
-                showToast("Server Started. Waiting for client...");
-                Log.d(TAG, "Waiting for client...");
-                socket = serverSocket.accept();
-                Log.d(TAG, "Connection established from server");
-                sendReceive = new SendReceive(socket);
-                sendReceive.start();
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.d(TAG, "ERROR: " + e);
-            } catch (Exception e) {
-                Log.d(TAG, "ERROR: " + e);
-            }
-        }
-    }
-
-    // client class for sending
-    public class ClientClass extends Thread {
-        Socket socket;
-        String hostAdd;
-        int port;
-
-        public ClientClass(String hostAddress, int port) {
-            this.port = port;
-            this.hostAdd = hostAddress;
-        }
-
-        @Override
-        public void run() {
-            try {
-                socket = new Socket(hostAdd, port);
-
-                sendReceive = new SendReceive(socket);
-                sendReceive.start();
-                showToast("Connected to other device. You can now exchange messages.");
-
-                Log.d(TAG, "Client is connected to server");
-
-                // enabling invisible components
-                enableComponent();
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.d(TAG, "Can't connect to server. Check the IP address and Port number and try again: " + e);
-            } catch (Exception e) {
-                Log.d(TAG, "ERROR: " + e);
-            }
-        }
-    }
-
     // add mesage method
-    private void addMessage(int color, String message, byte[] bytes) {
+    public void addMessage(int color, String message, byte[] bytes) {
 
         runOnUiThread(() -> {
                     TextView textView = new TextView(this);
@@ -1334,9 +1203,9 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                     textView.setTextColor(color);
-                    Log.d(TAG, "encrypted msg: " + message);
+                    Log.d(Constants.TAG, "encrypted msg: " + message);
                     String actualMessage = caesarCipherDecryption(message, shift);
-                    Log.d(TAG, "decrypted msg: " + actualMessage);
+                    Log.d(Constants.TAG, "decrypted msg: " + actualMessage);
 
 
                     String[]  messages = actualMessage.split("@%@", 0);
@@ -1352,7 +1221,7 @@ public class MainActivity extends AppCompatActivity {
                         conversationLayout.addView(imageView);
                         Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                         imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, imageView.getWidth(), imageView.getHeight(), false));
-                        Log.d(TAG, "File Name: "+messages[1]);
+                        Log.d(Constants.TAG, "File Name: "+messages[1]);
 
                         if(color == Color.parseColor("#FCE4EC"))
                             textView.setText(messages[1]+" has been sent");
@@ -1408,8 +1277,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                     // else it's a normal message
                     else{
-                        Log.d(TAG, "messages[0]: " +messages[0]);
-                        Log.d(TAG, "messages[0]: " +messages[1]);
+                        Log.d(Constants.TAG, "messages[0]: " +messages[0]);
+                        Log.d(Constants.TAG, "messages[0]: " +messages[1]);
 
                         textView.setTextSize(20);
                         textView.setText(messages[0]); // setting message on the message textview
